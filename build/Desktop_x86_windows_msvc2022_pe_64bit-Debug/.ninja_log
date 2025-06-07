@@ -1,0 +1,9 @@
+# ninja log v5
+8	361	7709982156537503	FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+8	361	7709982156537503	FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+8	361	7709982156537503	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+8	361	7709982156537503	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+366	2004	7709982173414197	CMakeFiles/FlatVec-Viewer.dir/FlatVec-Viewer_autogen/mocs_compilation.cpp.obj	88a2bdc6c8563d3e
+377	2051	7709982173877657	CMakeFiles/FlatVec-Viewer.dir/mainwindow.cpp.obj	2a167e6ef9b1d3a0
+372	2053	7709982173897901	CMakeFiles/FlatVec-Viewer.dir/main.cpp.obj	cd845993fad99726
+2054	2380	7709982177011970	FlatVec-Viewer.exe	39ea4e42095146b2
