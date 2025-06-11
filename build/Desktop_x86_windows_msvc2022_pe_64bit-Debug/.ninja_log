@@ -1,9 +1,28 @@
 # ninja log v5
-8	361	7709982156537503	FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
-8	361	7709982156537503	FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
-8	361	7709982156537503	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
-8	361	7709982156537503	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
-366	2004	7709982173414197	CMakeFiles/FlatVec-Viewer.dir/FlatVec-Viewer_autogen/mocs_compilation.cpp.obj	88a2bdc6c8563d3e
-377	2051	7709982173877657	CMakeFiles/FlatVec-Viewer.dir/mainwindow.cpp.obj	2a167e6ef9b1d3a0
-372	2053	7709982173897901	CMakeFiles/FlatVec-Viewer.dir/main.cpp.obj	cd845993fad99726
-2054	2380	7709982177011970	FlatVec-Viewer.exe	39ea4e42095146b2
+15	141	7710068561467695	FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+15	141	7710068561467695	FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+15	141	7710068561467695	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+15	141	7710068561467695	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+148	2379	7710068597698428	CMakeFiles/FlatVec-Viewer.dir/FlatVec-Viewer_autogen/mocs_compilation.cpp.obj	88a2bdc6c8563d3e
+355	436	7710056630798512	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/EWIEGA46WW/qrc_qrc.cpp	c4006426cae48bf5
+154	2475	7710068598688883	CMakeFiles/FlatVec-Viewer.dir/mainwindow.cpp.obj	2a167e6ef9b1d3a0
+151	2380	7710068597698428	CMakeFiles/FlatVec-Viewer.dir/main.cpp.obj	cd845993fad99726
+2475	2653	7710068600113994	FlatVec-Viewer.exe	318a66a863091aa9
+355	436	7710056630798512	FlatVec-Viewer_autogen/EWIEGA46WW/qrc_qrc.cpp	c4006426cae48bf5
+447	965	7710056636135830	CMakeFiles/FlatVec-Viewer.dir/FlatVec-Viewer_autogen/EWIEGA46WW/qrc_qrc.cpp.obj	ab624cce6d9fba3a
+16	382	7710873451559019	FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+16	382	7710873451559019	FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+16	382	7710873451559019	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+16	382	7710873451559019	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+383	2583	7710873473995810	CMakeFiles/FlatVec-Viewer.dir/FlatVec-Viewer_autogen/mocs_compilation.cpp.obj	88a2bdc6c8563d3e
+389	2589	7710873474045798	CMakeFiles/FlatVec-Viewer.dir/main.cpp.obj	cd845993fad99726
+395	2614	7710873474316958	CMakeFiles/FlatVec-Viewer.dir/mainwindow.cpp.obj	2a167e6ef9b1d3a0
+2614	2953	7710873477177077	FlatVec-Viewer.exe	318a66a863091aa9
+12	169	7710880549616597	FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+12	169	7710880549616597	FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+12	169	7710880549616597	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/timestamp	83bf8f35dffef7be
+12	169	7710880549616597	C:/Users/Артем/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/mocs_compilation.cpp	83bf8f35dffef7be
+180	2421	7710880588782850	CMakeFiles/FlatVec-Viewer.dir/main.cpp.obj	cd845993fad99726
+176	2422	7710880588782850	CMakeFiles/FlatVec-Viewer.dir/FlatVec-Viewer_autogen/mocs_compilation.cpp.obj	88a2bdc6c8563d3e
+184	2633	7710880590929394	CMakeFiles/FlatVec-Viewer.dir/mainwindow.cpp.obj	2a167e6ef9b1d3a0
+2634	2895	7710880592983181	FlatVec-Viewer.exe	318a66a863091aa9
