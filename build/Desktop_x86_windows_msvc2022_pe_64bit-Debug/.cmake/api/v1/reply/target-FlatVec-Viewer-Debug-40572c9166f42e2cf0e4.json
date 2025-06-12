@@ -75,13 +75,13 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 62,
+				"line" : 74,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 1,
-				"line" : 45,
+				"line" : 57,
 				"parent" : 0
 			},
 			{
@@ -368,7 +368,19 @@
 			[
 				0,
 				1,
-				2
+				2,
+				7,
+				9,
+				11,
+				13,
+				15,
+				17,
+				19,
+				21,
+				23,
+				25,
+				28,
+				34
 			]
 		}
 	],
@@ -486,7 +498,19 @@
 			[
 				0,
 				1,
-				2
+				2,
+				7,
+				9,
+				11,
+				13,
+				15,
+				17,
+				19,
+				21,
+				23,
+				25,
+				28,
+				34
 			]
 		},
 		{
@@ -494,7 +518,20 @@
 			"sourceIndexes" : 
 			[
 				3,
-				5
+				6,
+				8,
+				10,
+				12,
+				14,
+				16,
+				18,
+				20,
+				22,
+				24,
+				27,
+				30,
+				31,
+				32
 			]
 		},
 		{
@@ -502,14 +539,18 @@
 			"sourceIndexes" : 
 			[
 				4,
-				6
+				5,
+				26,
+				29,
+				33
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				7
+				35,
+				36
 			]
 		}
 	],
@@ -541,13 +582,161 @@
 		},
 		{
 			"backtrace" : 4,
-			"path" : "mainwindow.ui",
+			"path" : "interface/mainwindow.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 4,
+			"path" : "styles/qrc.qrc",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 4,
+			"path" : "rectangle/rectangle.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "rectangle/rectangle.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "rectangle/invisiblerectangle.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "rectangle/invisiblerectangle.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "rectangle/curvedrectangle.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "rectangle/curvedrectangle.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "rectangle/ordinaryrectangle.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "rectangle/ordinaryrectangle.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "rectangle/slantedrectangle.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "rectangle/slantedrectangle.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "datamanagement/filemanager.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "datamanagement/filemanager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "datamanagement/localdatamanager.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "datamanagement/localdatamanager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "layers/areabox.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "layers/areabox.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "camera/camera.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "camera/camera.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "projectwindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "projectwindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "interface/projectwindow.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 4,
+			"path" : "camerawindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "camerawindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "interface/camerawindow.ui",
 			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/include/ui_mainwindow.h",
+			"path" : "build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/include/interface/ui_mainwindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/include/interface/ui_projectwindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/include/interface/ui_camerawindow.h",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -558,8 +747,21 @@
 		},
 		{
 			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/NHPNRXPXNK/qrc_qrc.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
 			"isGenerated" : true,
 			"path" : "build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/timestamp.rule",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/NHPNRXPXNK/qrc_qrc.cpp.rule",
 			"sourceGroupIndex" : 3
 		}
 	],

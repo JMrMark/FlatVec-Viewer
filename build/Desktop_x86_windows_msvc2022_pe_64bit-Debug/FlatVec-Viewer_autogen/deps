@@ -372,9 +372,33 @@ FlatVec-Viewer_autogen/timestamp: \
 	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/CMakeFiles/3.29.3/CMakeCXXCompiler.cmake \
 	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/CMakeFiles/3.29.3/CMakeRCCompiler.cmake \
 	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/CMakeFiles/3.29.3/CMakeSystem.cmake \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/camera/camera.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/camera/camera.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/camerawindow.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/camerawindow.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/datamanagement/filemanager.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/datamanagement/filemanager.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/datamanagement/localdatamanager.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/datamanagement/localdatamanager.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/layers/areabox.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/layers/areabox.h \
 	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/main.cpp \
 	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/mainwindow.cpp \
 	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/mainwindow.h \
-	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/qrc.qrc \
-	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/mainwindow.ui \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/projectwindow.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/projectwindow.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/curvedrectangle.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/curvedrectangle.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/invisiblerectangle.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/invisiblerectangle.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/ordinaryrectangle.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/ordinaryrectangle.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/rectangle.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/rectangle.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/slantedrectangle.cpp \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/rectangle/slantedrectangle.h \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/styles/qrc.qrc \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/interface/camerawindow.ui \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/interface/mainwindow.ui \
+	C:/Users/Артем/Desktop/FlatVec\ Viewer/FlatVec-Viewer/interface/projectwindow.ui \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe

@@ -16,14 +16,25 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
-        mainwindow.ui
+        interface/mainwindow.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(FlatVec-Viewer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        qrc.qrc
+        styles/qrc.qrc
+        rectangle/rectangle.h rectangle/rectangle.cpp
+        rectangle/invisiblerectangle.h rectangle/invisiblerectangle.cpp
+        rectangle/curvedrectangle.h rectangle/curvedrectangle.cpp
+        rectangle/ordinaryrectangle.h rectangle/ordinaryrectangle.cpp
+        rectangle/slantedrectangle.h rectangle/slantedrectangle.cpp
+        datamanagement/filemanager.h datamanagement/filemanager.cpp
+        datamanagement/localdatamanager.h datamanagement/localdatamanager.cpp
+        layers/areabox.h layers/areabox.cpp
+        camera/camera.h camera/camera.cpp
+        projectwindow.h projectwindow.cpp interface/projectwindow.ui
+        camerawindow.h camerawindow.cpp interface/camerawindow.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET FlatVec-Viewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
