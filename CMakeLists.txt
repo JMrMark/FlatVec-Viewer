@@ -24,17 +24,19 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         styles/qrc.qrc
-        rectangle/rectangle.h rectangle/rectangle.cpp
-        rectangle/invisiblerectangle.h rectangle/invisiblerectangle.cpp
-        rectangle/curvedrectangle.h rectangle/curvedrectangle.cpp
-        rectangle/ordinaryrectangle.h rectangle/ordinaryrectangle.cpp
-        rectangle/slantedrectangle.h rectangle/slantedrectangle.cpp
+        geometry/rectangle/rectangle.h geometry/rectangle/rectangle.cpp
+        geometry/rectangle/invisiblerectangle.h geometry/rectangle/invisiblerectangle.cpp
+        geometry/rectangle/curvedrectangle.h geometry/rectangle/curvedrectangle.cpp
+        geometry/rectangle/ordinaryrectangle.h geometry/rectangle/ordinaryrectangle.cpp
+        geometry/rectangle/slantedrectangle.h geometry/rectangle/slantedrectangle.cpp
         datamanagement/filemanager.h datamanagement/filemanager.cpp
         datamanagement/localdatamanager.h datamanagement/localdatamanager.cpp
         layers/areabox.h layers/areabox.cpp
         camera/camera.h camera/camera.cpp
         projectwindow.h projectwindow.cpp interface/projectwindow.ui
         camerawindow.h camerawindow.cpp interface/camerawindow.ui
+        geometry/line/boxline.h geometry/line/boxline.cpp
+        widgets/maingraphicsview.h widgets/maingraphicsview.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET FlatVec-Viewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -7,7 +7,10 @@
 	"CROSS_CONFIG" : false,
 	"GENERATOR" : "Ninja",
 	"INCLUDE_DIR" : "C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/FlatVec-Viewer_autogen/include",
-	"INPUTS" : [],
+	"INPUTS" : 
+	[
+		"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/styles/style.qss"
+	],
 	"LOCK_FILE" : "C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/build/Desktop_x86_windows_msvc2022_pe_64bit-Debug/CMakeFiles/FlatVec-Viewer_autogen.dir/AutoRcc_qrc_NHPNRXPXNK_Lock.lock",
 	"MULTI_CONFIG" : false,
 	"OPTIONS" : [ "--no-zstd", "-name", "qrc" ],

@@ -1278,7 +1278,7 @@
 			"path" : "C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/GNUInstallDirs.cmake"
 		},
 		{
-			"path" : "qrc.qrc"
+			"path" : "styles/qrc.qrc"
 		}
 	],
 	"kind" : "cmakeFiles",

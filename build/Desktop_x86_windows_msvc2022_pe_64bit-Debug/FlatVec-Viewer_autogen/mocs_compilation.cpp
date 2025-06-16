@@ -2,3 +2,4 @@
 #include "EWIEGA46WW/moc_camerawindow.cpp"
 #include "EWIEGA46WW/moc_mainwindow.cpp"
 #include "EWIEGA46WW/moc_projectwindow.cpp"
+#include "IMAN36LHMA/moc_maingraphicsview.cpp"

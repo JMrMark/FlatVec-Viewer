@@ -342,6 +342,42 @@
 			null
 		],
 		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/line/boxline.h",
+			"MU",
+			"67JQUVRB7Q/moc_boxline.cpp",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/curvedrectangle.h",
+			"MU",
+			"KREHSFW24H/moc_curvedrectangle.cpp",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/invisiblerectangle.h",
+			"MU",
+			"KREHSFW24H/moc_invisiblerectangle.cpp",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/ordinaryrectangle.h",
+			"MU",
+			"KREHSFW24H/moc_ordinaryrectangle.cpp",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/rectangle.h",
+			"MU",
+			"KREHSFW24H/moc_rectangle.cpp",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/slantedrectangle.h",
+			"MU",
+			"KREHSFW24H/moc_slantedrectangle.cpp",
+			null
+		],
+		[
 			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/layers/areabox.h",
 			"MU",
 			"3UDRLETG6V/moc_areabox.cpp",
@@ -360,33 +396,9 @@
 			null
 		],
 		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/curvedrectangle.h",
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/widgets/maingraphicsview.h",
 			"MU",
-			"OYS6DS2UUD/moc_curvedrectangle.cpp",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/invisiblerectangle.h",
-			"MU",
-			"OYS6DS2UUD/moc_invisiblerectangle.cpp",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/ordinaryrectangle.h",
-			"MU",
-			"OYS6DS2UUD/moc_ordinaryrectangle.cpp",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/rectangle.h",
-			"MU",
-			"OYS6DS2UUD/moc_rectangle.cpp",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/slantedrectangle.h",
-			"MU",
-			"OYS6DS2UUD/moc_slantedrectangle.cpp",
+			"IMAN36LHMA/moc_maingraphicsview.cpp",
 			null
 		]
 	],
@@ -466,6 +478,36 @@
 			null
 		],
 		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/line/boxline.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/curvedrectangle.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/invisiblerectangle.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/ordinaryrectangle.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/rectangle.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/geometry/rectangle/slantedrectangle.cpp",
+			"MU",
+			null
+		],
+		[
 			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/layers/areabox.cpp",
 			"MU",
 			null
@@ -486,27 +528,7 @@
 			null
 		],
 		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/curvedrectangle.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/invisiblerectangle.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/ordinaryrectangle.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/rectangle.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/rectangle/slantedrectangle.cpp",
+			"C:/Users/\u0410\u0440\u0442\u0435\u043c/Desktop/FlatVec Viewer/FlatVec-Viewer/widgets/maingraphicsview.cpp",
 			"MU",
 			null
 		]
