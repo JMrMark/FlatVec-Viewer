@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
         styleFile.close();
     }
 
-    ui->graphicsView->setScene(new QGraphicsScene(this));
+    //ui->graphicsView->setScene(new QGraphicsScene(this));
 
     //ui->pushButton_curved->setObjectName("style1Button");
     //ui->pushButton_invisible->setObjectName("style2Button");

@@ -4,6 +4,16 @@
 #include <QGraphicsView>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QVector>
+
+#include "../geometry/rectangle/curvedrectangle.h"
+#include "../geometry/rectangle/invisiblerectangle.h"
+#include "../geometry/rectangle/ordinaryrectangle.h"
+#include "../geometry/rectangle/slantedrectangle.h"
+#include "../geometry/line/boxline.h"
+
+#include "../datamanagement/localdatamanager.h"
+#include "../geometry/action/action.h"
 
 class MainGraphicsView : public QGraphicsView {
     Q_OBJECT
@@ -15,8 +25,30 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
+
+    // just now for test
+    QVector<float> now;
+
+    qreal currentScale = 1.0;
+
+    QGraphicsScene      *m_scene             = nullptr;
+
+    // Не забувати очищати після використання
+    CurvedRectangle     *_CurvedRectangle    = nullptr;
+    InvisibleRectangle  *_InvisibleRectangle = nullptr;
+    OrdinaryRectangle   *_OrdinaryRectangle  = nullptr;
+    SlantedRectangle    *_SlantedRectangle   = nullptr;
+    BoxLine             *_BoxLine            = nullptr;
+
+    // Робота з локальною пам'ятю
+    LocalDataManager    *_LocalDataManager   = nullptr;
+
+    // Робота з геометрією об'єктів
+    Action              *_Action             = nullptr;
 
     // n = none
     // a = _OrdinaryRectangle

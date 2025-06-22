@@ -37,6 +37,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         camerawindow.h camerawindow.cpp interface/camerawindow.ui
         geometry/line/boxline.h geometry/line/boxline.cpp
         widgets/maingraphicsview.h widgets/maingraphicsview.cpp
+        geometry/action/action.h geometry/action/action.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET FlatVec-Viewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

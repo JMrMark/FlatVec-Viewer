@@ -1,7 +1,31 @@
 #include "maingraphicsview.h"
+#include <QScrollBar>
+#include <QWheelEvent>
+//#include <QRect>
 
 MainGraphicsView::MainGraphicsView(QWidget *parent)
     : QGraphicsView(parent) {
+
+    // 1. Скидаємо масштаб
+    this->resetTransform();
+
+    // 2. Встановлюємо сцену
+    m_scene = new QGraphicsScene(this);
+    this->setScene(m_scene);
+
+    // 3. Встановлюємо прямокутник сцени — обов’язково з (0,0)
+    m_scene->setSceneRect(0, 0, 1000, 1000);
+
+    // 4. Скидаємо прокрутку
+    this->horizontalScrollBar()->setValue(0);
+    this->verticalScrollBar()->setValue(0);
+
+    /*m_scene->addRect(100, 100, 50, 50);
+    now.append(100);
+    now.append(100);
+    now.append(50 + 100);
+    now.append(50 + 100);
+    _Action = new Action;*/
 }
 
 void MainGraphicsView::mousePressEvent(QMouseEvent *event){
@@ -9,13 +33,60 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
         QPoint viewPos = event->pos(); // Координати у виді (відносно QGraphicsView)
         QPointF scenePos = mapToScene(viewPos); // Перетворення в координати сцени
 
-        qDebug() << "Натискання миші у координатах view:" << viewPos;
+        //qDebug() << "Кількість об'єктів у сцені:" << m_scene->items().size();
+        //qDebug() << "Натискання миші у координатах view:" << viewPos;
         qDebug() << "Натискання миші у координатах сцени:" << scenePos;
-        qDebug() << "CurrentGeometry =" << CurrentGeometry;
+        //qDebug() << "CurrentGeometry =" << CurrentGeometry;
+        /*if (_Action->Rectangle_Collides_With_Point(scenePos, now)){
+            qDebug() << "Ви у середині прямокутника";
+        }
+        else {
+            qDebug() << "Ви зовні прямокутника";
+        }*/
     }
 
     QGraphicsView::mousePressEvent(event); // Не забувай викликати базовий обробник
 }
+
+void MainGraphicsView::wheelEvent(QWheelEvent *event) {
+    constexpr double scaleStep = 1.15;
+    constexpr double minScale = 100.0 / 1000.0;   // Мінімум: видимо 100x100 (якщо сцена 1000x1000)
+    constexpr double maxScale = 5000.0 / 1000.0;  // Максимум: видимо 5000x5000
+
+    QPointF oldPos = mapToScene(event->position().toPoint());
+
+    // Обрахунок нового масштабу:
+    if (event->angleDelta().y() > 0) {
+        if (currentScale * scaleStep <= maxScale) {
+            scale(scaleStep, scaleStep);
+            currentScale *= scaleStep;
+        }
+    } else {
+        if (currentScale / scaleStep >= minScale) {
+            scale(1.0 / scaleStep, 1.0 / scaleStep);
+            currentScale /= scaleStep;
+        }
+    }
+
+    // Зберігаємо точку під курсором
+    QPointF newPos = mapToScene(event->position().toPoint());
+    QPointF delta = newPos - oldPos;
+    translate(delta.x(), delta.y());
+    //qDebug() << "Current view area:" << mapToScene(viewport()->rect()).boundingRect();
+}
+
+void MainGraphicsView::resizeEvent(QResizeEvent *event) {
+    // Запам’ятовуємо позицію сцени в центрі екрана перед resize
+    QPointF oldCenter = mapToScene(viewport()->rect().center());
+
+    // Викликаємо стандартну поведінку (щоб змінився viewport)
+    QGraphicsView::resizeEvent(event);
+
+    // Центруємо знову ту ж точку після resize
+    centerOn(oldCenter);
+    //qDebug() << "Current view area:" << mapToScene(viewport()->rect()).boundingRect();
+}
+
 
 // Оновлюємо значення CurrentGeometry
 bool MainGraphicsView::CurrentGeometry_Set(char cg){
