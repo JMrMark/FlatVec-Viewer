@@ -6,6 +6,8 @@ class InvisibleRectangle: public Rectangle
 {
 public:
     InvisibleRectangle();
+
+    bool includesPoint(const QPointF &point) const;
 };
 
 #endif // INVISIBLERECTANGLE_H

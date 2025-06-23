@@ -20,12 +20,6 @@ MainGraphicsView::MainGraphicsView(QWidget *parent)
     this->horizontalScrollBar()->setValue(0);
     this->verticalScrollBar()->setValue(0);
 
-    /*m_scene->addRect(100, 100, 50, 50);
-    now.append(100);
-    now.append(100);
-    now.append(50 + 100);
-    now.append(50 + 100);
-    _Action = new Action;*/
 }
 
 void MainGraphicsView::mousePressEvent(QMouseEvent *event){
@@ -36,13 +30,6 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
         //qDebug() << "Кількість об'єктів у сцені:" << m_scene->items().size();
         //qDebug() << "Натискання миші у координатах view:" << viewPos;
         qDebug() << "Натискання миші у координатах сцени:" << scenePos;
-        //qDebug() << "CurrentGeometry =" << CurrentGeometry;
-        /*if (_Action->Rectangle_Collides_With_Point(scenePos, now)){
-            qDebug() << "Ви у середині прямокутника";
-        }
-        else {
-            qDebug() << "Ви зовні прямокутника";
-        }*/
     }
 
     QGraphicsView::mousePressEvent(event); // Не забувай викликати базовий обробник

@@ -12,6 +12,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+enable_testing()
+add_subdirectory(tests)
+
+# Створення окремої бібліотеки для логіки, яку можна тестувати
+add_library(rectangle_logic STATIC
+    geometry/rectangle/rectangle.cpp geometry/rectangle/rectangle.h
+    geometry/rectangle/curvedrectangle.cpp geometry/rectangle/curvedrectangle.h
+    geometry/rectangle/ordinaryrectangle.cpp geometry/rectangle/ordinaryrectangle.h
+    geometry/rectangle/slantedrectangle.cpp geometry/rectangle/slantedrectangle.h
+)
+
+target_link_libraries(rectangle_logic PUBLIC Qt6::Core Qt6::Gui)
+target_include_directories(rectangle_logic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -37,7 +51,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         camerawindow.h camerawindow.cpp interface/camerawindow.ui
         geometry/line/boxline.h geometry/line/boxline.cpp
         widgets/maingraphicsview.h widgets/maingraphicsview.cpp
-        geometry/action/action.h geometry/action/action.cpp
+
+        #tests/test_curvedrectangle.cpp
+        #tests/test_ordinaryrectangle.cpp
+        #tests/test_slantedrectangle.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET FlatVec-Viewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -4,8 +4,22 @@
 
 class SlantedRectangle: public Rectangle
 {
+
+    friend CurvedRectangle;
+    friend OrdinaryRectangle;
+
 public:
     SlantedRectangle();
+
+    virtual bool collides(const Rectangle& other) const override;
+
+    bool includesPoint(const QPointF &point) const;
+
+protected:
+
+    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const override;
+    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const override;
+    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c) const override;
 };
 
 #endif // SLANTEDRECTANGLE_H

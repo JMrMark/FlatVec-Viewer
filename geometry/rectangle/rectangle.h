@@ -1,39 +1,36 @@
 /*
- * Клас є основою для усіх прямокутників
+ * Клас є абстрактним
  * Він наслідується в усі похідні прямокутники,
- * тому має загальну реалізацію
+ * Використовується для подвійної диспетчеризації (double dispatch)
 */
 
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+#pragma once
+//#include "curvedrectangle.h"
+//#include "ordinaryrectangle.h"
+//#include "slantedrectangle.h"
+
 #include <QString>
+#include <QPointF>
+
+class CurvedRectangle;
+class OrdinaryRectangle;
+class SlantedRectangle;
 
 class Rectangle
 {
 public:
     Rectangle();
 
-    // Створення прямокутника (ініціалізація)
-    void rectangle_create(const double &xlt, const double &ylt, const double &xrb, const double &yrb);
+    virtual bool collides(const Rectangle& other) const = 0;
 
-    // Зміна розміру прямокутника
-    void rectangle_resize_left(const double &xlt, const double &ylt);
-    void rectangle_resize_right(const double &xrb, const double &yrb);
+    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const = 0;
+    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const = 0;
+    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c) const = 0;
+    virtual ~Rectangle() = default;
 
-    // Стилізація
-    void rectangle_change_color_background(const QString &color);
-    void rectangle_change_color_border(const QString &color);
-
-private:
-
-    // Лівий правий кут
-    double XLeftTop;
-    double YLeftTop;
-
-    // Правий нижній кут
-    double XRighBottom;
-    double YRighBottom;
 
 };
 

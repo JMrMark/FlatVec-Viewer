@@ -13,7 +13,6 @@
 #include "../geometry/line/boxline.h"
 
 #include "../datamanagement/localdatamanager.h"
-#include "../geometry/action/action.h"
 
 class MainGraphicsView : public QGraphicsView {
     Q_OBJECT
@@ -46,9 +45,6 @@ private:
 
     // Робота з локальною пам'ятю
     LocalDataManager    *_LocalDataManager   = nullptr;
-
-    // Робота з геометрією об'єктів
-    Action              *_Action             = nullptr;
 
     // n = none
     // a = _OrdinaryRectangle
