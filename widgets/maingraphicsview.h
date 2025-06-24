@@ -20,14 +20,31 @@ public:
     using QGraphicsView::QGraphicsView; // Наслідування конструкторів
     explicit MainGraphicsView(QWidget *parent = nullptr);
 
+    ~MainGraphicsView();
+
+    // Малює фігуру
+    template<typename T>
+    void drawFigure(T* rect);
+
+    // Шукає фігуру з якою перетинається
+    // Реалізацію змінити!!!
+    template<typename T1>
+    bool collidesWithSomeone(T1* rect);
+
     bool CurrentGeometry_Set(char cg);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
     void wheelEvent(QWheelEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
 private:
+
+    bool m_panning = false;
+    QPoint m_lastMousePos;
 
     // just now for test
     QVector<float> now;
@@ -37,11 +54,11 @@ private:
     QGraphicsScene      *m_scene             = nullptr;
 
     // Не забувати очищати після використання
-    CurvedRectangle     *_CurvedRectangle    = nullptr;
-    InvisibleRectangle  *_InvisibleRectangle = nullptr;
-    OrdinaryRectangle   *_OrdinaryRectangle  = nullptr;
-    SlantedRectangle    *_SlantedRectangle   = nullptr;
-    BoxLine             *_BoxLine            = nullptr;
+    QVector<CurvedRectangle*>       _CurvedRectangles;
+    QVector<InvisibleRectangle*>    _InvisibleRectangles;
+    QVector<OrdinaryRectangle*>     _OrdinaryRectangles;
+    QVector<SlantedRectangle*>      _SlantedRectangles;
+    QVector<BoxLine*>               _BoxLines;
 
     // Робота з локальною пам'ятю
     LocalDataManager    *_LocalDataManager   = nullptr;

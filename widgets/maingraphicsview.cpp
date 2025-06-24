@@ -6,6 +6,12 @@
 MainGraphicsView::MainGraphicsView(QWidget *parent)
     : QGraphicsView(parent) {
 
+    setDragMode(QGraphicsView::NoDrag); // вимикаємо стандартне перетягування
+    setMouseTracking(true); // слідкуємо за мишею навіть без натискання
+
+    setTransformationAnchor(QGraphicsView::AnchorUnderMouse); // масштабування під курсором
+    setResizeAnchor(QGraphicsView::AnchorUnderMouse);
+
     // 1. Скидаємо масштаб
     this->resetTransform();
 
@@ -20,6 +26,20 @@ MainGraphicsView::MainGraphicsView(QWidget *parent)
     this->horizontalScrollBar()->setValue(0);
     this->verticalScrollBar()->setValue(0);
 
+    _OrdinaryRectangles.append(new OrdinaryRectangle(100, 100, 100, 50));
+    drawFigure(_OrdinaryRectangles[0]);
+
+    //_OrdinaryRectangles.append(new OrdinaryRectangle(200, 200, 50, 100));
+    //m_scene->addItem(_OrdinaryRectangles.last());
+
+}
+
+MainGraphicsView::~MainGraphicsView(){
+    for (auto rect : _OrdinaryRectangles) {
+        m_scene->removeItem(rect);
+        delete rect;
+    }
+    _OrdinaryRectangles.clear();
 }
 
 void MainGraphicsView::mousePressEvent(QMouseEvent *event){
@@ -30,9 +50,48 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
         //qDebug() << "Кількість об'єктів у сцені:" << m_scene->items().size();
         //qDebug() << "Натискання миші у координатах view:" << viewPos;
         qDebug() << "Натискання миші у координатах сцени:" << scenePos;
+        if (_OrdinaryRectangles[0]->includesPoint(scenePos)){
+            qDebug() << "Всередині";
+        }
+        else {
+            qDebug() << "Ззовні";
+        }
+    }
+
+    if (event->button() == Qt::RightButton) {
+        m_panning = true;
+        m_lastMousePos = event->pos();
+        setCursor(Qt::ClosedHandCursor); // курсор у вигляді "руки"
+        event->accept();
+    } else {
+        QGraphicsView::mousePressEvent(event);
     }
 
     QGraphicsView::mousePressEvent(event); // Не забувай викликати базовий обробник
+}
+
+void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_panning) {
+        QPoint delta = event->pos() - m_lastMousePos;
+        m_lastMousePos = event->pos();
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
+        event->accept();
+    } else {
+        QGraphicsView::mouseMoveEvent(event);
+    }
+}
+
+void MainGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::RightButton && m_panning) {
+        m_panning = false;
+        setCursor(Qt::ArrowCursor);
+        event->accept();
+    } else {
+        QGraphicsView::mouseReleaseEvent(event);
+    }
 }
 
 void MainGraphicsView::wheelEvent(QWheelEvent *event) {
@@ -74,6 +133,38 @@ void MainGraphicsView::resizeEvent(QResizeEvent *event) {
     //qDebug() << "Current view area:" << mapToScene(viewport()->rect()).boundingRect();
 }
 
+template<typename T1>
+bool MainGraphicsView::collidesWithSomeone(T1* rect){
+    for (auto &el : _CurvedRectangles){
+        if (el != rect){
+            if (rect->collides(el)){
+                return true;
+            }
+        }
+    }
+    for (auto &el : _OrdinaryRectangles){
+        if (el != rect){
+            if (rect->collides(el)){
+                return true;
+            }
+        }
+    }
+    for (auto &el : _SlantedRectangles){
+        if (el != rect){
+            if (rect->collides(el)){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+template<typename T>
+void MainGraphicsView::drawFigure(T* rect){
+    if (!rect) return;
+
+    m_scene->addItem(rect);
+}
 
 // Оновлюємо значення CurrentGeometry
 bool MainGraphicsView::CurrentGeometry_Set(char cg){

@@ -23,7 +23,7 @@ add_library(rectangle_logic STATIC
     geometry/rectangle/slantedrectangle.cpp geometry/rectangle/slantedrectangle.h
 )
 
-target_link_libraries(rectangle_logic PUBLIC Qt6::Core Qt6::Gui)
+target_link_libraries(rectangle_logic PUBLIC Qt6::Core Qt6::Gui Qt6::Widgets)
 target_include_directories(rectangle_logic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(PROJECT_SOURCES

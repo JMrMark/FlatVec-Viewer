@@ -4,15 +4,15 @@
 OrdinaryRectangle::OrdinaryRectangle(float x, float y, float w, float l){
     X = x;
     Y = y;
-    Width = w;
     Length = l;
+    Width = w;
 }
 
 bool OrdinaryRectangle::includesPoint(const QPointF &point) const {
-
-    // Task Incl-Or
-
-    return true;
+    if (X <= point.x() && point.x() <= X + Width && Y <= point.y() && point.y() <= Y + Length){
+        return true;
+    }
+    return false;
 }
 
 bool OrdinaryRectangle::collides(const Rectangle& other) const {
@@ -35,4 +35,23 @@ bool OrdinaryRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c) 
     // Task Coll-Or->Sr
 
     return true;
+}
+
+QRectF OrdinaryRectangle::boundingRect() const {
+    return QRectF(X, Y, Width, Length);
+}
+
+void OrdinaryRectangle::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+    painter->setBrush(Qt::blue);
+    painter->drawRect(X, Y, Width, Length);
+}
+
+void OrdinaryRectangle::setDimensions(float width, float length){
+    Width = width;
+    Length = length;
+}
+
+void OrdinaryRectangle::setPosition(float x, float y){
+    X = x;
+    Y = y;
 }

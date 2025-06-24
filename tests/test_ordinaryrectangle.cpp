@@ -5,18 +5,42 @@ class TestOrdinaryRectangle : public QObject {
     Q_OBJECT
 
 private slots:
-    void testConstruction();
-    void testSomeBehavior(); // заміни на актуальні методи
+    //void testConstruction();
+    void testUpPoint();
+    void testDownPoint();
+    void testLeftPoint();
+    void testRightPoint();
+    void testInsidePoint();
 };
 
-void TestOrdinaryRectangle::testConstruction() {
-    OrdinaryRectangle r(1,1,1,1);
-    QVERIFY(true); // заміни на щось змістовне
+void TestOrdinaryRectangle::testUpPoint() {
+    OrdinaryRectangle r(2,2,3,2);
+    QPointF pos(3, 1);
+    QVERIFY(!r.includesPoint(pos));
 }
 
-void TestOrdinaryRectangle::testSomeBehavior() {
-    //OrdinaryRectangle r;
-    // QVERIFY(...);
+void TestOrdinaryRectangle::testDownPoint() {
+    OrdinaryRectangle r(2,2,3,2);
+    QPointF pos(5, 1);
+    QVERIFY(!r.includesPoint(pos));
+}
+
+void TestOrdinaryRectangle::testLeftPoint() {
+    OrdinaryRectangle r(2,2,3,2);
+    QPointF pos(1, 3);
+    QVERIFY(!r.includesPoint(pos));
+}
+
+void TestOrdinaryRectangle::testRightPoint() {
+    OrdinaryRectangle r(2,2,3,2);
+    QPointF pos(6, 3);
+    QVERIFY(!r.includesPoint(pos));
+}
+
+void TestOrdinaryRectangle::testInsidePoint() {
+    OrdinaryRectangle r(2,2,3,2);
+    QPointF pos(3, 3);
+    QVERIFY(r.includesPoint(pos));
 }
 
 QTEST_MAIN(TestOrdinaryRectangle)

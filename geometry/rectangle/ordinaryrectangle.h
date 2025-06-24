@@ -2,7 +2,10 @@
 #define ORDINARYRECTANGLE_H
 #include "rectangle.h"
 
-class OrdinaryRectangle: public Rectangle
+#include <QGraphicsItem>
+#include <QPainter>
+
+class OrdinaryRectangle: public Rectangle, public QGraphicsItem
 {
 
     friend CurvedRectangle;
@@ -11,9 +14,16 @@ class OrdinaryRectangle: public Rectangle
 public:
     OrdinaryRectangle(float x, float y, float w, float l);
 
+    QRectF boundingRect() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
     virtual bool collides(const Rectangle& other) const override;
 
     bool includesPoint(const QPointF &point) const;
+
+    // Геттери та сеттери
+    void setDimensions(float width, float length);
+    void setPosition(float x, float y);
 
 protected:
 
@@ -23,11 +33,11 @@ protected:
 
 private:
 
-    double X;
-    double Y;
+    float X;
+    float Y;
 
-    double Width;
-    double Length;
+    float Width;
+    float Length;
 };
 
 #endif // ORDINARYRECTANGLE_H
