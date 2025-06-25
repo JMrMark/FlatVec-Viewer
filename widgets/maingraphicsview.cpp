@@ -26,36 +26,42 @@ MainGraphicsView::MainGraphicsView(QWidget *parent)
     this->horizontalScrollBar()->setValue(0);
     this->verticalScrollBar()->setValue(0);
 
-    _OrdinaryRectangles.append(new OrdinaryRectangle(100, 100, 100, 50));
-    drawFigure(_OrdinaryRectangles[0]);
+    _AllRectangles.append(new OrdinaryRectangle(100, 100, 100, 50));
 
-    //_OrdinaryRectangles.append(new OrdinaryRectangle(200, 200, 50, 100));
-    //m_scene->addItem(_OrdinaryRectangles.last());
+    //_OrdinaryRectangles.append(new OrdinaryRectangle(100, 100, 100, 50));
+    drawFigure(_AllRectangles[0]);
 
 }
 
 MainGraphicsView::~MainGraphicsView(){
-    for (auto rect : _OrdinaryRectangles) {
+    for (auto &rect : _AllRectangles) {
         m_scene->removeItem(rect);
         delete rect;
     }
-    _OrdinaryRectangles.clear();
+    _AllRectangles.clear();
 }
 
 void MainGraphicsView::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton) {
-        QPoint viewPos = event->pos(); // Координати у виді (відносно QGraphicsView)
-        QPointF scenePos = mapToScene(viewPos); // Перетворення в координати сцени
-
-        //qDebug() << "Кількість об'єктів у сцені:" << m_scene->items().size();
-        //qDebug() << "Натискання миші у координатах view:" << viewPos;
-        qDebug() << "Натискання миші у координатах сцени:" << scenePos;
-        if (_OrdinaryRectangles[0]->includesPoint(scenePos)){
-            qDebug() << "Всередині";
+        m_posBegin = mapToScene(event->pos());
+        if (!(m_currentGeometry == GeometryType::None)){
+            m_tracking = true;
+            m_tempRectItem = new QGraphicsRectItem();
+            m_tempRectItem->setPen(QPen(Qt::blue, 1, Qt::DashLine));
+            m_scene->addItem(m_tempRectItem);
+            event->accept();
         }
         else {
-            qDebug() << "Ззовні";
+            if (includesPointSomeone(m_posBegin)){
+                qDebug() << "Всередині!";
+            }
+            else {
+                qDebug() << "Ззовні";
+            }
         }
+    }
+    else {
+        QGraphicsView::mousePressEvent(event);
     }
 
     if (event->button() == Qt::RightButton) {
@@ -78,7 +84,17 @@ void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
         verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
         event->accept();
-    } else {
+    }
+    else if (m_tracking && m_tempRectItem) {
+
+        QPointF currentPos = mapToScene(event->pos());
+
+        QRectF rect = QRectF(m_posBegin, currentPos).normalized();
+        m_tempRectItem->setRect(rect);
+
+        event->accept();
+    }
+    else {
         QGraphicsView::mouseMoveEvent(event);
     }
 }
@@ -89,7 +105,30 @@ void MainGraphicsView::mouseReleaseEvent(QMouseEvent *event)
         m_panning = false;
         setCursor(Qt::ArrowCursor);
         event->accept();
-    } else {
+    }
+    else if (event->button() == Qt::LeftButton && m_tracking) {
+        m_tracking = false;
+
+        QPointF posEnd = mapToScene(event->pos());
+        QRectF rect = QRectF(m_posBegin, posEnd).normalized();
+
+        // видаляємо тимчасовий прямокутник
+        if (m_tempRectItem) {
+            m_scene->removeItem(m_tempRectItem);
+            delete m_tempRectItem;
+            m_tempRectItem = nullptr;
+        }
+        mapToScene(event->pos());
+
+        // Тимчасово!
+        if (m_currentGeometry == GeometryType::Ordinary){
+            _AllRectangles.append(createRectangleFromType(rect));
+            drawFigure(_AllRectangles.last());
+        }
+
+        event->accept();
+    }
+    else {
         QGraphicsView::mouseReleaseEvent(event);
     }
 }
@@ -134,22 +173,8 @@ void MainGraphicsView::resizeEvent(QResizeEvent *event) {
 }
 
 template<typename T1>
-bool MainGraphicsView::collidesWithSomeone(T1* rect){
-    for (auto &el : _CurvedRectangles){
-        if (el != rect){
-            if (rect->collides(el)){
-                return true;
-            }
-        }
-    }
-    for (auto &el : _OrdinaryRectangles){
-        if (el != rect){
-            if (rect->collides(el)){
-                return true;
-            }
-        }
-    }
-    for (auto &el : _SlantedRectangles){
+bool MainGraphicsView::collidesWithSomeone(const T1* rect) const{
+    for (auto &el : _AllRectangles){
         if (el != rect){
             if (rect->collides(el)){
                 return true;
@@ -159,23 +184,47 @@ bool MainGraphicsView::collidesWithSomeone(T1* rect){
     return false;
 }
 
-template<typename T>
-void MainGraphicsView::drawFigure(T* rect){
-    if (!rect) return;
-
-    m_scene->addItem(rect);
-}
-
-// Оновлюємо значення CurrentGeometry
-bool MainGraphicsView::CurrentGeometry_Set(char cg){
-
-    if (CurrentGeometry == cg){
-        CurrentGeometry = 'n'; // Вносимо стандартне значення
-        return true;
-    }
-    else if (cg >= 'a' && cg <= 'f' || cg == 'n') {
-        CurrentGeometry = cg;
-        return true;
+bool MainGraphicsView::includesPointSomeone(const QPointF &pos) const{
+    for (auto &el : _AllRectangles){
+        if (el->includesPoint(pos)){
+            return true;
+        }
     }
     return false;
+}
+
+void MainGraphicsView::drawFigure(QGraphicsItem* item) {
+    if (!item) return;
+
+    if (!m_scene->items().contains(item))
+        m_scene->addItem(item);
+}
+
+bool MainGraphicsView::setCurrentGeometry(GeometryType type)
+{
+    if (m_currentGeometry == type) {
+        m_currentGeometry = GeometryType::None;
+        return true;
+    }
+
+    m_currentGeometry = type;
+    return true;
+}
+
+Rectangle* MainGraphicsView::createRectangleFromType(QRectF rect)
+{
+    switch (m_currentGeometry) {
+    case GeometryType::Ordinary:
+        return new OrdinaryRectangle(rect.x(), rect.y(), rect.width(), rect.height());
+    case GeometryType::Curved:
+        //return new CurvedRectangle(rect.x(), rect.y(), rect.width(), rect.height());
+    case GeometryType::Slanted:
+        //return new SlantedRectangle(rect.x(), rect.y(), rect.width(), rect.height());
+    case GeometryType::Invisible:
+        //return new InvisibleRectangle(rect.x(), rect.y(), rect.width(), rect.height());
+    case GeometryType::LineBox:
+        //return new BoxLine(rect.x(), rect.y(), rect.width(), rect.height());
+    default:
+        return nullptr;
+    }
 }

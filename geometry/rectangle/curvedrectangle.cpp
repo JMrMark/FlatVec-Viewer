@@ -34,3 +34,12 @@ bool CurvedRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c) co
     return true;
 }
 
+// Тимчасово!
+QRectF CurvedRectangle::boundingRect() const {
+    return QRectF(10, 10, 10, 10);
+}
+void CurvedRectangle::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+    painter->setBrush(Qt::blue);
+    painter->drawRect(10, 10, 10, 10);
+}
+// Тимчасово!

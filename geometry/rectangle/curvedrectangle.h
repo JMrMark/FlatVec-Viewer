@@ -12,7 +12,10 @@ public:
 
     virtual bool collides(const Rectangle& other) const override;
 
-    bool includesPoint(const QPointF &point) const;
+    QRectF boundingRect() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    bool includesPoint(const QPointF &point) const override;
 
 protected:
 

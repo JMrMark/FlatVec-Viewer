@@ -7,7 +7,7 @@ class InvisibleRectangle: public Rectangle
 public:
     InvisibleRectangle();
 
-    bool includesPoint(const QPointF &point) const;
+    bool includesPoint(const QPointF &point) const override;
 };
 
 #endif // INVISIBLERECTANGLE_H

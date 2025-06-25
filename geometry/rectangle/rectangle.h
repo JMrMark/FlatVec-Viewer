@@ -15,14 +15,20 @@
 #include <QString>
 #include <QPointF>
 
+#include <QGraphicsItem>
+#include <QPainter>
+
 class CurvedRectangle;
 class OrdinaryRectangle;
 class SlantedRectangle;
 
-class Rectangle
+class Rectangle : public QGraphicsItem
 {
 public:
+    using QGraphicsItem::QGraphicsItem;
     Rectangle();
+
+    virtual bool includesPoint(const QPointF &point) const = 0;
 
     virtual bool collides(const Rectangle& other) const = 0;
 

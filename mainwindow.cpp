@@ -6,6 +6,7 @@
 
 #include "mainwindow.h"
 #include "interface/ui_mainwindow.h"
+#include "geometrytype/geometrytype.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
         styleFile.close();
     }
 
+    ui->graphicsView->setCurrentGeometry(GeometryType::None);
     //ui->graphicsView->setScene(new QGraphicsScene(this));
 
     //ui->pushButton_curved->setObjectName("style1Button");
@@ -38,12 +40,12 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_ordinary_clicked()
 {
     if (ui->comboBox->currentIndex() == 0){
-        if(ui->graphicsView->CurrentGeometry_Set('a')){
+        if(ui->graphicsView->setCurrentGeometry(GeometryType::Ordinary)){
             Button_CurrentPaint(ui->pushButton_ordinary);
         }
     }
     else {
-        if(ui->graphicsView->CurrentGeometry_Set('d')){
+        if(ui->graphicsView->setCurrentGeometry(GeometryType::Invisible)){
             Button_CurrentPaint(ui->pushButton_ordinary);
         }
     }
@@ -52,7 +54,7 @@ void MainWindow::on_pushButton_ordinary_clicked()
 // Натиснуто кнопку для побудови згинаючого прямокутника
 void MainWindow::on_pushButton_curved_clicked()
 {
-    if(ui->graphicsView->CurrentGeometry_Set('b')){
+    if(ui->graphicsView->setCurrentGeometry(GeometryType::Curved)){
         Button_CurrentPaint(ui->pushButton_curved);
     }
 }
@@ -60,7 +62,7 @@ void MainWindow::on_pushButton_curved_clicked()
 // Натиснуто кнопку для побудови похилого прямокутника
 void MainWindow::on_pushButton_slanted_clicked()
 {
-    if(ui->graphicsView->CurrentGeometry_Set('c')){
+    if(ui->graphicsView->setCurrentGeometry(GeometryType::Slanted)){
         Button_CurrentPaint(ui->pushButton_slanted);
     }
 }
@@ -70,7 +72,7 @@ void MainWindow::on_pushButton_slanted_clicked()
 // двері, проходи і т.д.)
 void MainWindow::on_pushButton_invisible_clicked()
 {
-    if(ui->graphicsView->CurrentGeometry_Set('d')){
+    if(ui->graphicsView->setCurrentGeometry(GeometryType::Invisible)){
         Button_CurrentPaint(ui->pushButton_invisible);
     }
 }
@@ -106,7 +108,7 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     }
     _ButtonNow = nullptr;
 
-    ui->graphicsView->CurrentGeometry_Set('n');
+    ui->graphicsView->setCurrentGeometry(GeometryType::None);
 
     if (index == 0){
         ui->pushButton_invisible->show();

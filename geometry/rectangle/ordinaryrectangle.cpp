@@ -2,10 +2,19 @@
 #include "curvedrectangle.h"
 
 OrdinaryRectangle::OrdinaryRectangle(float x, float y, float w, float l){
+    if (w < 0) {
+        x += w;
+        w = -w;
+    }
+    if (l < 0) {
+        y += l;
+        l = -l;
+    }
+
     X = x;
     Y = y;
-    Length = l;
     Width = w;
+    Length = l;
 }
 
 bool OrdinaryRectangle::includesPoint(const QPointF &point) const {

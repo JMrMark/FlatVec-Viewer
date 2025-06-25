@@ -12,7 +12,9 @@
 #include "../geometry/rectangle/slantedrectangle.h"
 #include "../geometry/line/boxline.h"
 
-#include "../datamanagement/localdatamanager.h"
+#include "../geometrytype/geometrytype.h"
+
+//#include "../datamanagement/localdatamanager.h"
 
 class MainGraphicsView : public QGraphicsView {
     Q_OBJECT
@@ -23,15 +25,16 @@ public:
     ~MainGraphicsView();
 
     // Малює фігуру
-    template<typename T>
-    void drawFigure(T* rect);
+    void drawFigure(QGraphicsItem* item);
 
     // Шукає фігуру з якою перетинається
-    // Реалізацію змінити!!!
     template<typename T1>
-    bool collidesWithSomeone(T1* rect);
+    bool collidesWithSomeone(const T1* rect) const;
 
-    bool CurrentGeometry_Set(char cg);
+    bool includesPointSomeone(const QPointF &pos) const;
+
+    bool setCurrentGeometry(GeometryType type);
+    Rectangle* createRectangleFromType(QRectF rect);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -43,34 +46,30 @@ protected:
 
 private:
 
+    GeometryType m_currentGeometry = GeometryType::None;
+    QGraphicsRectItem* m_tempRectItem = nullptr;
+
     bool m_panning = false;
     QPoint m_lastMousePos;
+
+    bool m_tracking = false;
+    QPointF m_posBegin;
+    QPointF m_posNow;
 
     // just now for test
     QVector<float> now;
 
     qreal currentScale = 1.0;
 
-    QGraphicsScene      *m_scene             = nullptr;
+    QGraphicsScene      *m_scene = nullptr;
 
-    // Не забувати очищати після використання
-    QVector<CurvedRectangle*>       _CurvedRectangles;
-    QVector<InvisibleRectangle*>    _InvisibleRectangles;
-    QVector<OrdinaryRectangle*>     _OrdinaryRectangles;
-    QVector<SlantedRectangle*>      _SlantedRectangles;
-    QVector<BoxLine*>               _BoxLines;
+    QVector<Rectangle*> _AllRectangles;
+
+    QVector<BoxLine*>   _BoxLines;
 
     // Робота з локальною пам'ятю
-    LocalDataManager    *_LocalDataManager   = nullptr;
+    //LocalDataManager    *_LocalDataManager = nullptr;
 
-    // n = none
-    // a = _OrdinaryRectangle
-    // b = _CurvedRectangle
-    // c = _SlantedRectangle
-    // d = _InvisibleRectangle
-    // f = _LineBox
-    // Для зміни значення є CurrentGeometry_Set
-    char CurrentGeometry = 'n';
 };
 
 #endif // MAINGRAPHICSVIEW_H
