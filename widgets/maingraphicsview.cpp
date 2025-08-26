@@ -26,19 +26,66 @@ MainGraphicsView::MainGraphicsView(QWidget *parent)
     this->horizontalScrollBar()->setValue(0);
     this->verticalScrollBar()->setValue(0);
 
-    _AllRectangles.append(new OrdinaryRectangle(100, 100, 100, 50));
+    createNewPaintFile(currentFilePath);
 
-    //_OrdinaryRectangles.append(new OrdinaryRectangle(100, 100, 100, 50));
-    drawFigure(_AllRectangles[0]);
+    currentRectangles().append(new OrdinaryRectangle(100, 100, 100, 50));
+    drawFigure(currentRectangles()[0]);
 
 }
 
+void MainGraphicsView::createNewPaintFile(QString file_name){
+    QVector<Rectangle*> _AllRectangles;
+    _AllFiles.insert(file_name, _AllRectangles);
+    currentFilePath = file_name;
+}
+
+QVector<Rectangle*>& MainGraphicsView::currentRectangles() {
+    return _AllFiles[currentFilePath];
+}
+
 MainGraphicsView::~MainGraphicsView(){
-    for (auto &rect : _AllRectangles) {
-        m_scene->removeItem(rect);
-        delete rect;
+    for (auto& scene : _AllFiles) {
+        for (auto* rect : scene) {
+            m_scene->removeItem(rect);
+            delete rect;
+        }
+        scene.clear();
     }
-    _AllRectangles.clear();
+    _AllFiles.clear();
+}
+
+QVector<Rectangle*> MainGraphicsView::getSelectedVector(const QString &filePath){
+
+    if (currentFilePath == "Std_file") {
+        if (_AllFiles.contains("Std_file")) {
+            // Копіюємо вміст тимчасового файла під новий шлях
+            _AllFiles[filePath] = _AllFiles.value("Std_file");
+            // Видаляємо старий ключ
+            _AllFiles.remove("Std_file");
+            currentFilePath = filePath;
+        }
+    }
+
+    if (_AllFiles.contains(filePath)) {
+        return _AllFiles.value(filePath);
+    }
+    return {};
+}
+
+bool MainGraphicsView::insertNewFile(const QString &fileName, const QVector<Rectangle*> vec) {
+
+    if (fileName == nullptr) return false;
+
+    currentFilePath = fileName;
+    _AllFiles.insert(fileName, vec);
+
+    m_scene->clear();
+
+    for (auto &rec : vec){
+        drawFigure(rec);
+    }
+
+    return true;
 }
 
 void MainGraphicsView::mousePressEvent(QMouseEvent *event){
@@ -52,12 +99,23 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
             event->accept();
         }
         else {
-            if (includesPointSomeone(m_posBegin)){
-                qDebug() << "Всередині!";
+
+            if (currentRect != nullptr) {
+                currentRect->CurrentState = 0;
+                currentRect = nullptr;
+            }
+
+            currentRect = includesPointSomeone(m_posBegin);
+
+            if (currentRect == nullptr) {
+                qDebug() << "Ззовні, currentRect == nullptr";
             }
             else {
-                qDebug() << "Ззовні";
+                currentRect->CurrentState = 1;
+                qDebug() << "Стан змінено";
             }
+
+            m_scene->update();
         }
     }
     else {
@@ -86,6 +144,12 @@ void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
         event->accept();
     }
     else if (m_tracking && m_tempRectItem) {
+
+        if (currentRect != nullptr) {
+            currentRect->CurrentState = 0;
+            currentRect = nullptr;
+            m_scene->update();
+        }
 
         QPointF currentPos = mapToScene(event->pos());
 
@@ -122,8 +186,23 @@ void MainGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 
         // Тимчасово!
         if (m_currentGeometry == GeometryType::Ordinary){
-            _AllRectangles.append(createRectangleFromType(rect));
-            drawFigure(_AllRectangles.last());
+            currentRectangles().append(createRectangleFromType(rect));
+            drawFigure(currentRectangles().last());
+
+            if (currentRect != nullptr) {
+                currentRect->CurrentState = 0;
+                currentRect = nullptr;
+            }
+
+            currentRect = currentRectangles().last();
+
+            if (includesRect(currentRect)){
+                currentRect->CurrentState = 3;
+            }
+            else {
+                currentRect->CurrentState = 1;
+            }
+            m_scene->update();
         }
 
         event->accept();
@@ -173,24 +252,44 @@ void MainGraphicsView::resizeEvent(QResizeEvent *event) {
 }
 
 template<typename T1>
-bool MainGraphicsView::collidesWithSomeone(const T1* rect) const{
-    for (auto &el : _AllRectangles){
-        if (el != rect){
-            if (rect->collides(el)){
-                return true;
-            }
+bool MainGraphicsView::collidesWithSomeone(const T1* rect) const {
+    const auto& rectangles = _AllFiles[currentFilePath];
+    for (auto* el : rectangles) {
+        if (el != rect && rect->collides(el)) {
+            return true;
         }
     }
     return false;
 }
 
-bool MainGraphicsView::includesPointSomeone(const QPointF &pos) const{
-    for (auto &el : _AllRectangles){
-        if (el->includesPoint(pos)){
+Rectangle* MainGraphicsView::includesPointSomeone(const QPointF &pos) const {
+    const auto& rectangles = _AllFiles[currentFilePath];
+    for (auto* el : rectangles) {
+        if (el->includesPoint(pos)) {
+            return el;
+        }
+    }
+    return nullptr;
+}
+
+bool MainGraphicsView::includesRect(const Rectangle* rec) const{
+    const auto& rectangles = _AllFiles[currentFilePath];
+    for (auto* el : rectangles) {
+        if (el->collides(*rec) && el != rec) {
             return true;
         }
     }
     return false;
+}
+
+Rectangle* MainGraphicsView::includesPointRectangle(const QPointF &pos) const {
+    const auto& rectangles = _AllFiles[currentFilePath];
+    for (auto* el : rectangles) {
+        if (el->includesPoint(pos)) {
+            return el;
+        }
+    }
+    return nullptr;
 }
 
 void MainGraphicsView::drawFigure(QGraphicsItem* item) {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>966</width>
+    <height>656</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -142,8 +142,78 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="0" rowspan="3">
-     <widget class="QTreeView" name="treeView"/>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Робота з файлами</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1,0">
+       <property name="leftMargin">
+        <number>3</number>
+       </property>
+       <property name="topMargin">
+        <number>3</number>
+       </property>
+       <property name="rightMargin">
+        <number>3</number>
+       </property>
+       <property name="bottomMargin">
+        <number>3</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton_addNewFile">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>8</width>
+           <height>8</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton_openNewFile">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>8</width>
+           <height>8</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButton_deleteFile">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>8</width>
+           <height>8</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="2">
+     <widget class="QTreeView" name="treeView">
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -152,29 +222,23 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>966</width>
      <height>22</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="file">
     <property name="title">
      <string>Файл</string>
     </property>
-    <widget class="QMenu" name="menu_5">
-     <property name="title">
-      <string>Відкрити новий</string>
-     </property>
-     <addaction name="action_8"/>
-     <addaction name="action_9"/>
-    </widget>
-    <addaction name="menu_5"/>
+    <addaction name="actionCreateNewFile"/>
+    <addaction name="actionOpenNewFile"/>
     <addaction name="separator"/>
-    <addaction name="action_2"/>
-    <addaction name="action_3"/>
-    <addaction name="action_4"/>
+    <addaction name="actionSaveFile"/>
+    <addaction name="actionSaveFileAs"/>
+    <addaction name="action_SaveAll"/>
     <addaction name="separator"/>
     <addaction name="action_7"/>
    </widget>
@@ -193,23 +257,23 @@
      <string>Вигляд</string>
     </property>
    </widget>
-   <addaction name="menu"/>
+   <addaction name="file"/>
    <addaction name="menu_2"/>
    <addaction name="menu_4"/>
    <addaction name="menu_3"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action_2">
+  <action name="actionSaveFile">
    <property name="text">
     <string>Зберегти файл</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="actionSaveFileAs">
    <property name="text">
     <string>Зберегти файл як</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="action_SaveAll">
    <property name="text">
     <string>Зберегти усе</string>
    </property>
@@ -227,6 +291,16 @@
   <action name="action_9">
    <property name="text">
     <string>Створити новий</string>
+   </property>
+  </action>
+  <action name="actionCreateNewFile">
+   <property name="text">
+    <string>Новий файл</string>
+   </property>
+  </action>
+  <action name="actionOpenNewFile">
+   <property name="text">
+    <string>Відкрити файл</string>
    </property>
   </action>
  </widget>

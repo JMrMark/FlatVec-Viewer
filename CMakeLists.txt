@@ -12,6 +12,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+# ASM - library
+
+enable_language(ASM_MASM)
+
+add_library(asmcode STATIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/datamanagement/logic/compress.asm
+    ${CMAKE_CURRENT_SOURCE_DIR}/datamanagement/logic/decode.asm
+    ${CMAKE_CURRENT_SOURCE_DIR}/datamanagement/logic/decompress.asm
+    ${CMAKE_CURRENT_SOURCE_DIR}/datamanagement/logic/encode.asm
+)
+
+target_include_directories(asmcode PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/datamanagement/logic
+)
+
+# Testing - library
+
 enable_testing()
 add_subdirectory(tests)
 
@@ -21,6 +38,7 @@ add_library(rectangle_logic STATIC
     geometry/rectangle/curvedrectangle.cpp geometry/rectangle/curvedrectangle.h
     geometry/rectangle/ordinaryrectangle.cpp geometry/rectangle/ordinaryrectangle.h
     geometry/rectangle/slantedrectangle.cpp geometry/rectangle/slantedrectangle.h
+    styles/stylemanager.h styles/stylemanager.cpp
 )
 
 target_link_libraries(rectangle_logic PUBLIC Qt6::Core Qt6::Gui Qt6::Widgets)
@@ -38,24 +56,27 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         styles/qrc.qrc
+        geometrytype/geometrytype.h
+
         geometry/rectangle/rectangle.h geometry/rectangle/rectangle.cpp
         geometry/rectangle/invisiblerectangle.h geometry/rectangle/invisiblerectangle.cpp
         geometry/rectangle/curvedrectangle.h geometry/rectangle/curvedrectangle.cpp
         geometry/rectangle/ordinaryrectangle.h geometry/rectangle/ordinaryrectangle.cpp
         geometry/rectangle/slantedrectangle.h geometry/rectangle/slantedrectangle.cpp
+        geometry/line/boxline.h geometry/line/boxline.cpp
+
         datamanagement/filemanager.h datamanagement/filemanager.cpp
-        datamanagement/localdatamanager.h datamanagement/localdatamanager.cpp
+        datamanagement/servermanager.h datamanagement/servermanager.cpp
+
         layers/areabox.h layers/areabox.cpp
         camera/camera.h camera/camera.cpp
+
         projectwindow.h projectwindow.cpp interface/projectwindow.ui
         camerawindow.h camerawindow.cpp interface/camerawindow.ui
-        geometry/line/boxline.h geometry/line/boxline.cpp
-        widgets/maingraphicsview.h widgets/maingraphicsview.cpp
-        geometrytype/geometrytype.h
 
-        #tests/test_curvedrectangle.cpp
-        #tests/test_ordinaryrectangle.cpp
-        #tests/test_slantedrectangle.cpp
+        widgets/maingraphicsview.h widgets/maingraphicsview.cpp
+        widgets/treecontroller.h widgets/treecontroller.cpp
+        styles/stylemanager.h styles/stylemanager.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET FlatVec-Viewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -75,6 +96,7 @@ else()
     endif()
 endif()
 
+target_link_libraries(FlatVec-Viewer PRIVATE asmcode)
 target_link_libraries(FlatVec-Viewer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

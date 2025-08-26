@@ -1,5 +1,6 @@
 #include "ordinaryrectangle.h"
 #include "curvedrectangle.h"
+#include "../../styles/stylemanager.h"
 
 OrdinaryRectangle::OrdinaryRectangle(float x, float y, float w, float l){
     if (w < 0) {
@@ -33,10 +34,8 @@ bool OrdinaryRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a) co
 }
 
 bool OrdinaryRectangle::collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const {
-
+    return !(X + Width <= b.X || X >= b.X + b.Width || Y + Length <= b.Y || Y >= b.Y + b.Length);
     // Task Coll-Or->Or
-
-    return true;
 }
 
 bool OrdinaryRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c) const {
@@ -51,7 +50,19 @@ QRectF OrdinaryRectangle::boundingRect() const {
 }
 
 void OrdinaryRectangle::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-    painter->setBrush(Qt::blue);
+    QString styleName;
+    switch (CurrentState) {
+    case 0: styleName = "StdStyleRect"; break;
+    case 1: styleName = "ActivatedStyleRect"; break;
+    case 2: styleName = "SelectedStyleRect"; break;
+    case 3: styleName = "ErrorStyleRect"; break;
+    default: styleName = "StdStyleRect"; break;
+    }
+
+    Style st = StyleManager::getStyle(styleName);
+
+    painter->setBrush(st.brush);
+    painter->setPen(st.pen);
     painter->drawRect(X, Y, Width, Length);
 }
 
@@ -64,3 +75,4 @@ void OrdinaryRectangle::setPosition(float x, float y){
     X = x;
     Y = y;
 }
+

@@ -17,6 +17,7 @@ public:
 
     bool includesPoint(const QPointF &point) const override;
 
+
 protected:
 
     virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const override;

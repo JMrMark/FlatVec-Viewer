@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QVector>
 
+#include <QMap>
+
 #include "../geometry/rectangle/curvedrectangle.h"
 #include "../geometry/rectangle/invisiblerectangle.h"
 #include "../geometry/rectangle/ordinaryrectangle.h"
@@ -13,8 +15,6 @@
 #include "../geometry/line/boxline.h"
 
 #include "../geometrytype/geometrytype.h"
-
-//#include "../datamanagement/localdatamanager.h"
 
 class MainGraphicsView : public QGraphicsView {
     Q_OBJECT
@@ -24,6 +24,12 @@ public:
 
     ~MainGraphicsView();
 
+    // Ініціалізація нового файлу та його вектора (Не перевірена)
+    bool insertNewFile(const QString &fileName, const QVector<Rectangle*> vec);
+
+    // Метод отримує назву файлу та у результаті повертає вектор даних полотна
+    QVector<Rectangle*> getSelectedVector(const QString &filePath);
+
     // Малює фігуру
     void drawFigure(QGraphicsItem* item);
 
@@ -31,10 +37,23 @@ public:
     template<typename T1>
     bool collidesWithSomeone(const T1* rect) const;
 
-    bool includesPointSomeone(const QPointF &pos) const;
+    Rectangle* includesPointSomeone(const QPointF &pos) const;
+    bool includesRect(const Rectangle* rec) const;
+
+    // Повертає вказівник на фігуру (Завжди перевіряти чи не рівний nullptr!!!)
+    Rectangle* includesPointRectangle(const QPointF &pos) const;
 
     bool setCurrentGeometry(GeometryType type);
     Rectangle* createRectangleFromType(QRectF rect);
+
+    void createNewPaintFile(QString file_name);
+    QVector<Rectangle*>& currentRectangles();
+
+    QString getCurrentFilePath()
+    { return currentFilePath; }
+
+    QMap<QString, QVector<Rectangle*>> getAllFiles() const
+    { return _AllFiles; }
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -46,6 +65,8 @@ protected:
 
 private:
 
+    QString currentFilePath = "Std_file";
+
     GeometryType m_currentGeometry = GeometryType::None;
     QGraphicsRectItem* m_tempRectItem = nullptr;
 
@@ -56,6 +77,9 @@ private:
     QPointF m_posBegin;
     QPointF m_posNow;
 
+    // Змінна для моніторингу активного прямокутника (зменшує навантаження на процесор)
+    Rectangle* currentRect = nullptr;
+
     // just now for test
     QVector<float> now;
 
@@ -63,12 +87,9 @@ private:
 
     QGraphicsScene      *m_scene = nullptr;
 
-    QVector<Rectangle*> _AllRectangles;
+    QMap<QString, QVector<Rectangle*>> _AllFiles;
 
     QVector<BoxLine*>   _BoxLines;
-
-    // Робота з локальною пам'ятю
-    //LocalDataManager    *_LocalDataManager = nullptr;
 
 };
 

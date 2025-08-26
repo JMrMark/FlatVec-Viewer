@@ -51,3 +51,36 @@ QPushButton#style2Button {
     color: white;
     border-radius: 10px;
 }
+
+
+/* --- Стандартний прямокутник --- */
+#StdStyleRect {
+    border: 1px solid black;
+    background-color: #a9a9a9;   /* сірий */
+}
+
+/* --- Активований (для зміни розміру) --- */
+#ActivatedStyleRect {
+    border: 1px solid black;
+    background-color: #a9a9a9;   /* той самий сірий, але відрізняється "хендлами" */
+}
+
+/* Ми додаємо стилі для "червоних точок" */
+#ActivatedStyleRect::handle {
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 4px;          /* робимо коло */
+}
+
+/* --- Виділений (для переміщення) --- */
+#SelectedStyleRect {
+    border: 1px solid black;
+    background-color: #90c8c8;   /* бірюзовий */
+}
+
+/* --- Прямокутник неправильно розміщений --- */
+#ErrorStyleRect {
+    border: 1px solid black;
+    background-color: #fb4444;   /* червоний */
+}

@@ -3,8 +3,11 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QFileDialog>
 
 #include "interface/ui_mainwindow.h"
+#include "widgets/treecontroller.h"
+#include "datamanagement/filemanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,6 +24,10 @@ public:
     ~MainWindow();
 
     void Button_CurrentPaint(QPushButton *buttonNext);
+
+    void onCreateNewFile();
+
+    void openFile(const QString &filePath);
 
 private slots:
     void on_pushButton_ordinary_clicked();
@@ -39,10 +46,31 @@ private slots:
 
     void on_lineEdit_width_textEdited(const QString &arg1);
 
+    void on_pushButton_addNewFile_clicked();
+
+    void on_actionOpenNewFile_triggered();
+
+    void on_actionSaveFile_triggered();
+
+    void on_actionSaveFileAs_triggered();
+
+    void onTreeFileClicked(const QModelIndex &index);
+
+    void on_pushButton_openNewFile_clicked();
+
+    void on_action_SaveAll_triggered();
+
 private:
+
     Ui::MainWindow *ui;
 
     // Вказівник на кнопку, для динамічного задання їх стилю
     QPushButton         *_ButtonNow          = nullptr;
+
+    TreeController      *_TreeController     = nullptr;
+    FileManager         *_FileManager        = nullptr;
+
+    MainGraphicsView    *_MainGraphicsView   = nullptr;
+
 };
 #endif // MAINWINDOW_H

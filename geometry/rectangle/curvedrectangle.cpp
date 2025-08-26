@@ -34,6 +34,7 @@ bool CurvedRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c) co
     return true;
 }
 
+
 // Тимчасово!
 QRectF CurvedRectangle::boundingRect() const {
     return QRectF(10, 10, 10, 10);

@@ -32,10 +32,28 @@ public:
 
     virtual bool collides(const Rectangle& other) const = 0;
 
+    // Змінна стилю
+    inline void setActivatedOff()   {CurrentState = 0; update();}
+    inline void setActivatedOn()    {CurrentState = 1; update();}
+    inline void setSelectedOn()     {CurrentState = 2; update();}
+
+    // Змінна розмірів
+    //virtual bool setSize(float w, ...) const = 0;
+
+
+    // Взаємодія прямокутників
     virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const = 0;
     virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const = 0;
     virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c) const = 0;
+
     virtual ~Rectangle() = default;
+
+    // Стан потрібен для підвантаження стилю
+    // 0 - StdStyleRect
+    // 1 - ActivatedStyleRect
+    // 2 - SelectedStyleRect
+    // 3 - ErrorStyleRect
+    int CurrentState = 0;
 
 
 };
