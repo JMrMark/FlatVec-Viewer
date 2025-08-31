@@ -11,6 +11,34 @@ bool SlantedRectangle::includesPoint(const QPointF &point) const {
     return true;
 }
 
+bool SlantedRectangle::includesPoint(const QPointF &point, float overSize) const {
+
+    // Task Incl-Sr
+    // Збільшення прямокутника на overSize для взаємодії з червоними точками
+
+    return true;
+}
+
+QVector<QPointF> SlantedRectangle::handles() const{
+    // None for now
+    QVector<QPointF> p;
+    return p;
+}
+
+Rectangle::HandleType SlantedRectangle::hitHandle(const QPointF &point, qreal radius) const{
+    return HandleType::None;
+}
+
+Rectangle::Action SlantedRectangle::createAction(HandleType handle){
+    return [this](const QPointF &pos) {
+        qDebug() << "Nothing";
+    };
+}
+
+void SlantedRectangle::normalizeRect() {
+    // Bark
+}
+
 bool SlantedRectangle::collides(const Rectangle& other) const {
     return other.collidesWithSlantedRectangle(*this);
 }

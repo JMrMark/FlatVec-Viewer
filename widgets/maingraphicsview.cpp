@@ -99,23 +99,30 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
             event->accept();
         }
         else {
-
-            if (currentRect != nullptr) {
-                currentRect->CurrentState = 0;
-                currentRect = nullptr;
-            }
-
-            currentRect = includesPointSomeone(m_posBegin);
-
             if (currentRect == nullptr) {
-                qDebug() << "Ззовні, currentRect == nullptr";
+                currentRect = includesPointSomeone(m_posBegin);
+                if (currentRect != nullptr) {
+                    currentRect->setActivatedOn();
+                    qDebug() << "Стан змінено";
+                }
             }
             else {
-                currentRect->CurrentState = 1;
-                qDebug() << "Стан змінено";
-            }
+                if (currentRect->includesPoint(m_posBegin, 8.0)){
+                    auto handle = currentRect->hitHandle(m_posBegin);
+                    currentAction = currentRect->createAction(handle);
+                }
+                else {
+                    currentRect->setActivatedOff();
+                    currentRect = nullptr;
 
-            m_scene->update();
+                    currentRect = includesPointSomeone(m_posBegin);
+
+                    if (currentRect != nullptr) {
+                        currentRect->setActivatedOn();
+                        qDebug() << "Стан змінено";
+                    }
+                }
+            }
         }
     }
     else {
@@ -136,6 +143,48 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
 
 void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
+    if (currentRect != nullptr) {
+        QPointF scenePos = mapToScene(event->pos());
+        if (currentRect->CurrentState == 1){
+            auto handle = currentRect->hitHandle(scenePos, 8.0); // радіус 8px
+            switch (handle) {
+            case Rectangle::TopMiddle:
+            case Rectangle::BottomMiddle:
+                setCursor(Qt::SizeVerCursor); // вертикальна ↕
+                break;
+            case Rectangle::MiddleLeft:
+            case Rectangle::MiddleRight:
+                setCursor(Qt::SizeHorCursor); // горизонтальна ↔
+                break;
+            case Rectangle::TopLeft:
+            case Rectangle::BottomRight:
+                setCursor(Qt::SizeFDiagCursor); // діагональна ↘↖
+                break;
+            case Rectangle::TopRight:
+            case Rectangle::BottomLeft:
+                setCursor(Qt::SizeBDiagCursor); // діагональна ↙↗
+                break;
+            case Rectangle::Center:
+                setCursor(Qt::SizeAllCursor); // хрестик
+                break;
+            default:
+                setCursor(Qt::ArrowCursor); // стандартний курсор
+                break;
+            }
+        }
+        else {
+            if (currentRect->CurrentState == 3 &&
+                currentRect->includesPoint(scenePos))
+            {
+                setCursor(Qt::SizeAllCursor);
+            } else {
+                setCursor(Qt::ArrowCursor);
+            }
+        }
+    } else {
+        setCursor(Qt::ArrowCursor);
+    }
+
     if (m_panning) {
         QPoint delta = event->pos() - m_lastMousePos;
         m_lastMousePos = event->pos();
@@ -146,9 +195,8 @@ void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
     else if (m_tracking && m_tempRectItem) {
 
         if (currentRect != nullptr) {
-            currentRect->CurrentState = 0;
+            currentRect->setActivatedOff();
             currentRect = nullptr;
-            m_scene->update();
         }
 
         QPointF currentPos = mapToScene(event->pos());
@@ -157,6 +205,10 @@ void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
         m_tempRectItem->setRect(rect);
 
         event->accept();
+    }
+    else if (currentAction){
+        QPointF currentPos = mapToScene(event->pos());
+        currentAction(currentPos);
     }
     else {
         QGraphicsView::mouseMoveEvent(event);
@@ -170,74 +222,125 @@ void MainGraphicsView::mouseReleaseEvent(QMouseEvent *event)
         setCursor(Qt::ArrowCursor);
         event->accept();
     }
-    else if (event->button() == Qt::LeftButton && m_tracking) {
-        m_tracking = false;
+    else if (event->button() == Qt::LeftButton) {
+        if (m_tracking){
+            m_tracking = false;
 
-        QPointF posEnd = mapToScene(event->pos());
-        QRectF rect = QRectF(m_posBegin, posEnd).normalized();
+            QPointF posEnd = mapToScene(event->pos());
+            QRectF rect = QRectF(m_posBegin, posEnd).normalized();
 
-        // видаляємо тимчасовий прямокутник
-        if (m_tempRectItem) {
-            m_scene->removeItem(m_tempRectItem);
-            delete m_tempRectItem;
-            m_tempRectItem = nullptr;
-        }
-        mapToScene(event->pos());
+            // видаляємо тимчасовий прямокутник
+            if (m_tempRectItem) {
+                m_scene->removeItem(m_tempRectItem);
+                delete m_tempRectItem;
+                m_tempRectItem = nullptr;
+            }
+            mapToScene(event->pos());
 
-        // Тимчасово!
-        if (m_currentGeometry == GeometryType::Ordinary){
-            currentRectangles().append(createRectangleFromType(rect));
-            drawFigure(currentRectangles().last());
+            // Тимчасово!
+            if (m_currentGeometry == GeometryType::Ordinary){
+                currentRectangles().append(createRectangleFromType(rect));
+                drawFigure(currentRectangles().last());
 
-            if (currentRect != nullptr) {
-                currentRect->CurrentState = 0;
-                currentRect = nullptr;
+                if (currentRect != nullptr) {
+                    currentRect->CurrentState = 0;
+                    currentRect = nullptr;
+                }
+
+                currentRect = currentRectangles().last();
+                currentRect->normalizeRect();
+
+                if (includesRect(currentRect)){
+                    currentRect->setErrorOn();
+                }
+                else {
+                    currentRect->setActivatedOn();
+                }
             }
 
-            currentRect = currentRectangles().last();
-
+            event->accept();
+        }
+        if (currentAction != nullptr){
+            currentAction = nullptr;
             if (includesRect(currentRect)){
-                currentRect->CurrentState = 3;
+                currentRect->setErrorOn();
             }
-            else {
-                currentRect->CurrentState = 1;
-            }
-            m_scene->update();
         }
-
-        event->accept();
     }
     else {
         QGraphicsView::mouseReleaseEvent(event);
     }
 }
 
-void MainGraphicsView::wheelEvent(QWheelEvent *event) {
-    constexpr double scaleStep = 1.15;
-    constexpr double minScale = 100.0 / 1000.0;   // Мінімум: видимо 100x100 (якщо сцена 1000x1000)
-    constexpr double maxScale = 5000.0 / 1000.0;  // Максимум: видимо 5000x5000
+void MainGraphicsView::wheelEvent(QWheelEvent* event) {
+    const double zoomInFactor = 1.15;
+    const double zoomOutFactor = 1.0 / zoomInFactor;
+    const double maxScale = 4.0;
 
-    QPointF oldPos = mapToScene(event->position().toPoint());
+    // Поточний масштаб
+    double currentScale = transform().m11();
+    double factor = (event->angleDelta().y() > 0) ? zoomInFactor : zoomOutFactor;
+    double newScale = currentScale * factor;
 
-    // Обрахунок нового масштабу:
-    if (event->angleDelta().y() > 0) {
-        if (currentScale * scaleStep <= maxScale) {
-            scale(scaleStep, scaleStep);
-            currentScale *= scaleStep;
-        }
+    // Обмеження масштабу
+    QRectF sceneBounds = sceneRect();
+
+    // Мінімальний масштаб: коли viewBounds ≈ sceneBounds
+    double minScaleX = viewport()->width() / sceneBounds.width();
+    double minScaleY = viewport()->height() / sceneBounds.height();
+    double minScale = std::min(minScaleX, minScaleY);
+
+    if (newScale < minScale) {
+        //qDebug() << "Досягли мінімального масштабу";
+        // Центруємо сцену
+        centerOn(sceneBounds.center());
+        return;
+    }
+
+    if (newScale > maxScale) {
+        //qDebug() << "Досягли максимального масштабу";
+        return;
+    }
+
+    // Масштабуємо відносно курсора
+    scale(factor, factor);
+
+    // Після трансформації
+    QRectF viewBoundsAfter = mapToScene(viewport()->rect()).boundingRect();
+
+    // Якщо viewBounds > sceneBounds → центруємо
+    if (viewBoundsAfter.width() > sceneBounds.width() ||
+        viewBoundsAfter.height() > sceneBounds.height()) {
+        //qDebug() << "View більше за сцену — центруємо";
+        centerOn(sceneBounds.center());
     } else {
-        if (currentScale / scaleStep >= minScale) {
-            scale(1.0 / scaleStep, 1.0 / scaleStep);
-            currentScale /= scaleStep;
+        // Притискаємо до меж
+        qreal dx = 0, dy = 0;
+        if (viewBoundsAfter.left() < sceneBounds.left())
+            dx = sceneBounds.left() - viewBoundsAfter.left();
+        if (viewBoundsAfter.top() < sceneBounds.top())
+            dy = sceneBounds.top() - viewBoundsAfter.top();
+        if (viewBoundsAfter.right() > sceneBounds.right())
+            dx = sceneBounds.right() - viewBoundsAfter.right();
+        if (viewBoundsAfter.bottom() > sceneBounds.bottom())
+            dy = sceneBounds.bottom() - viewBoundsAfter.bottom();
+
+        if (dx != 0 || dy != 0) {
+            //qDebug() << "Притискаємо камеру: dx=" << dx << " dy=" << dy;
+            translate(dx, dy);
         }
     }
 
-    // Зберігаємо точку під курсором
-    QPointF newPos = mapToScene(event->position().toPoint());
-    QPointF delta = newPos - oldPos;
-    translate(delta.x(), delta.y());
-    //qDebug() << "Current view area:" << mapToScene(viewport()->rect()).boundingRect();
+    // Вивід для відладки
+    /*qDebug() << "----- Wheel Event -----";
+    qDebug() << "Cursor Scene Pos:" << scenePos;
+    qDebug() << "Scale:" << transform().m11();
+    qDebug() << "Scene bounds:" << sceneBounds;
+    qDebug() << "View bounds after zoom:" << viewBoundsAfter;
+    qDebug() << "-----------------------";*/
 }
+
+
 
 void MainGraphicsView::resizeEvent(QResizeEvent *event) {
     // Запам’ятовуємо позицію сцени в центрі екрана перед resize
@@ -251,15 +354,31 @@ void MainGraphicsView::resizeEvent(QResizeEvent *event) {
     //qDebug() << "Current view area:" << mapToScene(viewport()->rect()).boundingRect();
 }
 
-template<typename T1>
-bool MainGraphicsView::collidesWithSomeone(const T1* rect) const {
-    const auto& rectangles = _AllFiles[currentFilePath];
-    for (auto* el : rectangles) {
-        if (el != rect && rect->collides(el)) {
-            return true;
-        }
+void MainGraphicsView::drawBackground(QPainter *painter, const QRectF &rect) {
+    // Колір та стиль сітки
+    QColor gridColor(200, 200, 200, 125); // світло-сірий напівпрозорий
+    QPen pen(gridColor);
+    pen.setWidth(0); // 0 = найтонша лінія незалежно від масштабу
+    painter->setPen(pen);
+
+    // Крок сітки (наприклад 20 пікселів)
+    constexpr qreal gridStep = 100;
+
+    // Межі видимої області
+    qreal left   = std::floor(rect.left()   / gridStep) * gridStep;
+    qreal top    = std::floor(rect.top()    / gridStep) * gridStep;
+    qreal right  = std::ceil (rect.right()  / gridStep) * gridStep;
+    qreal bottom = std::ceil (rect.bottom() / gridStep) * gridStep;
+
+    // Вертикальні лінії
+    for (qreal x = left; x <= right; x += gridStep) {
+        painter->drawLine(QLineF(x, top, x, bottom));
     }
-    return false;
+
+    // Горизонтальні лінії
+    for (qreal y = top; y <= bottom; y += gridStep) {
+        painter->drawLine(QLineF(left, y, right, y));
+    }
 }
 
 Rectangle* MainGraphicsView::includesPointSomeone(const QPointF &pos) const {

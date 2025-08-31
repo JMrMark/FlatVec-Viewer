@@ -49,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete _MainGraphicsView;
+    delete _FileManager;
+    delete _TreeController;
     delete ui;
 }
 

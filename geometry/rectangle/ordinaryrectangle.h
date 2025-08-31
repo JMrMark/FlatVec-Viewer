@@ -17,10 +17,17 @@ public:
     virtual bool collides(const Rectangle& other) const override;
 
     bool includesPoint(const QPointF &point) const override;
+    bool includesPoint(const QPointF &point, float overSize) const override;
 
     // Геттери та сеттери
     void setDimensions(float width, float length);
     void setPosition(float x, float y);
+
+    QVector<QPointF> handles() const override;
+    HandleType hitHandle(const QPointF &point, qreal radius = 8.0) const override;
+    Action createAction(HandleType handle) override;
+
+    void normalizeRect() override;
 
 protected:
 

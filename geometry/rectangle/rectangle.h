@@ -28,33 +28,47 @@ public:
     using QGraphicsItem::QGraphicsItem;
     Rectangle();
 
+    // ---= Взаємодія прямокутника з точкою =--- //
     virtual bool includesPoint(const QPointF &point) const = 0;
+    virtual bool includesPoint(const QPointF &point, float overSize) const = 0;
 
-    virtual bool collides(const Rectangle& other) const = 0;
-
-    // Змінна стилю
+    // ---= Стан прямокутника =--- //
     inline void setActivatedOff()   {CurrentState = 0; update();}
     inline void setActivatedOn()    {CurrentState = 1; update();}
     inline void setSelectedOn()     {CurrentState = 2; update();}
-
-    // Змінна розмірів
-    //virtual bool setSize(float w, ...) const = 0;
-
-
-    // Взаємодія прямокутників
-    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const = 0;
-    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const = 0;
-    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c) const = 0;
-
-    virtual ~Rectangle() = default;
+    inline void setErrorOn()        {CurrentState = 3; update();}
 
     // Стан потрібен для підвантаження стилю
     // 0 - StdStyleRect
     // 1 - ActivatedStyleRect
     // 2 - SelectedStyleRect
     // 3 - ErrorStyleRect
-    int CurrentState = 0;
+    unsigned short int CurrentState = 0;
 
+    // ---= Модифікація прямокутника =--- //
+    enum HandleType {
+        TopLeft,    TopMiddle,    TopRight,
+        MiddleLeft, Center,       MiddleRight,
+        BottomLeft, BottomMiddle, BottomRight,
+        None
+    };
+
+    virtual QVector<QPointF> handles() const = 0;
+    virtual HandleType hitHandle(const QPointF &point, qreal radius = 8.0) const = 0;
+
+    using Action = std::function<void(const QPointF &mousePos)>;
+    virtual Action createAction(HandleType handle) = 0;
+
+    virtual void normalizeRect() = 0;
+
+    // ---= Взаємодія прямокутників =--- //
+    virtual bool collides(const Rectangle& other) const = 0;
+
+    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const = 0;
+    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const = 0;
+    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c) const = 0;
+
+    virtual ~Rectangle() = default;
 
 };
 

@@ -33,10 +33,6 @@ public:
     // Малює фігуру
     void drawFigure(QGraphicsItem* item);
 
-    // Шукає фігуру з якою перетинається
-    template<typename T1>
-    bool collidesWithSomeone(const T1* rect) const;
-
     Rectangle* includesPointSomeone(const QPointF &pos) const;
     bool includesRect(const Rectangle* rec) const;
 
@@ -56,12 +52,17 @@ public:
     { return _AllFiles; }
 
 protected:
+    // Відслідковування миші
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
+    // Відследковування миші та масштабування полотна
     void wheelEvent(QWheelEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+
+    // Задній план сцени
+    void drawBackground(QPainter *painter, const QRectF &rect) override;
 
 private:
 
@@ -79,6 +80,7 @@ private:
 
     // Змінна для моніторингу активного прямокутника (зменшує навантаження на процесор)
     Rectangle* currentRect = nullptr;
+    Rectangle::Action currentAction = nullptr;
 
     // just now for test
     QVector<float> now;

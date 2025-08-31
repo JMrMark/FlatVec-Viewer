@@ -16,7 +16,13 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     bool includesPoint(const QPointF &point) const override;
+    bool includesPoint(const QPointF &point, float overSize) const override;
 
+    QVector<QPointF> handles() const override;
+    HandleType hitHandle(const QPointF &point, qreal radius = 8.0) const override;
+    Action createAction(HandleType handle) override;
+
+    void normalizeRect() override;
 
 protected:
 

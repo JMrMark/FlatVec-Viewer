@@ -13,6 +13,34 @@ bool CurvedRectangle::includesPoint(const QPointF &point) const {
     return true;
 }
 
+bool CurvedRectangle::includesPoint(const QPointF &point, float overSize) const {
+
+    // Task Incl-Cr
+    // Збільшення прямокутника на overSize для взаємодії з червоними точками
+
+    return true;
+}
+
+QVector<QPointF> CurvedRectangle::handles() const{
+    // None for now
+    QVector<QPointF> p;
+    return p;
+}
+
+Rectangle::HandleType CurvedRectangle::hitHandle(const QPointF &point, qreal radius) const{
+    return HandleType::None;
+}
+
+Rectangle::Action CurvedRectangle::createAction(HandleType handle){
+    return [this](const QPointF &pos) {
+        qDebug() << "Nothing";
+    };
+}
+
+void CurvedRectangle::normalizeRect() {
+    // Mya
+}
+
 bool CurvedRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a) const {
 
     // Task Coll-Cr->Cr
