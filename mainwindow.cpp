@@ -17,14 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Flat Viewer");
 
-    // Застосовуємо стилі
-    QFile styleFile(":/style/style.qss");
-    if (styleFile.open(QFile::ReadOnly)) {
-        QString style = QLatin1String(styleFile.readAll());
-        qApp->setStyleSheet(style);
-        styleFile.close();
-    }
-
     _MainGraphicsView = qobject_cast<MainGraphicsView*>(ui->graphicsView);
 
     _MainGraphicsView->setCurrentGeometry(GeometryType::None);
@@ -38,6 +30,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionCreateNewFile, &QAction::triggered, this, &MainWindow::onCreateNewFile);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::onTreeFileClicked);
+
+    connect(_MainGraphicsView, &MainGraphicsView::rectangleSelected,
+            this, &MainWindow::onRectangleSelected);
+
+    connect(_MainGraphicsView, &MainGraphicsView::rectangleDeselected,
+            this, &MainWindow::onRectangleDeselected);
+
     //connect(ui->actionSaveFile, &QAction::triggered, this, &MainWindow::on_actionSaveFile_triggered);
     //connect(ui->actionSaveFileAs, &QAction::triggered, this, &MainWindow::on_actionSaveFileAs_triggered);
 
@@ -110,7 +109,27 @@ void MainWindow::openFile(const QString &filePath) {
     }
 }
 
-void MainWindow::on_action_SaveAll_triggered()
+QString MainWindow::loadStyle(const QString &fileName) {
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly)) return "";
+    return QString::fromUtf8(file.readAll());
+}
+
+void MainWindow::applyTheme(const QString &themeName) {
+    QString qss;
+    if (themeName == "dark") {
+        qss = loadStyle(":/styles/darkTheme.qss");
+    } else if (themeName == "light") {
+        qss = loadStyle(":/styles/lightTheme.qss");
+    }
+
+    qApp->setStyleSheet(qss);
+
+    // зберігаємо вибір користувача (dark/light/system)
+    QSettings().setValue("theme", themeName);
+}
+
+void MainWindow::on_actionSaveAll_triggered()
 {
     const auto& allFiles = _MainGraphicsView->getAllFiles();
 
@@ -286,15 +305,14 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 // Висота змінена
 void MainWindow::on_lineEdit_height_textEdited(const QString &arg1)
 {
-
+    _MainGraphicsView->setNewSizeToRect(ui->lineEdit_width->text().toFloat(), ui->lineEdit_height->text().toFloat());
 }
 
 // Ширина змінена
 void MainWindow::on_lineEdit_width_textEdited(const QString &arg1)
 {
-
+    _MainGraphicsView->setNewSizeToRect(ui->lineEdit_width->text().toFloat(), ui->lineEdit_height->text().toFloat());
 }
-
 
 void MainWindow::on_pushButton_addNewFile_clicked()
 {
@@ -305,5 +323,28 @@ void MainWindow::on_pushButton_addNewFile_clicked()
 void MainWindow::on_pushButton_openNewFile_clicked()
 {
     on_actionOpenNewFile_triggered();
+}
+
+void MainWindow::on_actionDarkTheme_triggered(){
+    applyTheme("dark");
+}
+
+void MainWindow::on_actionLightTheme_triggered(){
+    applyTheme("light");
+}
+
+void MainWindow::on_pushButton_deleteObject_clicked()
+{
+    _MainGraphicsView->deleteCurrentRect();
+}
+
+void MainWindow::onRectangleSelected(float width, float length){
+    ui->lineEdit_width->setText(QString::number(width));
+    ui->lineEdit_height->setText(QString::number(length));
+}
+
+void MainWindow::onRectangleDeselected(){
+    ui->lineEdit_width->clear();
+    ui->lineEdit_height->clear();
 }
 

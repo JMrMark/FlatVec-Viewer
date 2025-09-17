@@ -45,20 +45,20 @@ bool OrdinaryRectangle::includesPoint(const QPointF &point, float overSize) cons
     return false;
 }
 
-bool OrdinaryRectangle::collides(const Rectangle& other) const {
-    return other.collidesWithOrdinaryRectangle(*this);
+bool OrdinaryRectangle::collides(const Rectangle& other, float overSize) const {
+    return other.collidesWithOrdinaryRectangle(*this, overSize);
 }
 
-bool OrdinaryRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a) const {
-    return a.collidesWithOrdinaryRectangle(*this);
+bool OrdinaryRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a, float overSize) const {
+    return a.collidesWithOrdinaryRectangle(*this, overSize);
 }
 
-bool OrdinaryRectangle::collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const {
-    return !(X + Width <= b.X || X >= b.X + b.Width || Y + Length <= b.Y || Y >= b.Y + b.Length);
+bool OrdinaryRectangle::collidesWithOrdinaryRectangle(const OrdinaryRectangle& b, float overSize) const {
+    return !(X + Width + overSize <= b.X || X - overSize >= b.X + b.Width || Y + Length + overSize <= b.Y || Y - overSize >= b.Y + b.Length);
     // Task Coll-Or->Or
 }
 
-bool OrdinaryRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c) const {
+bool OrdinaryRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c, float overSize) const {
 
     // Task Coll-Or->Sr
 
@@ -108,6 +108,20 @@ void OrdinaryRectangle::setPosition(float x, float y){
     Y = y;
 }
 
+void OrdinaryRectangle::setSize(float width, float length){
+    prepareGeometryChange();
+    if (width < 25 || length < 25){
+        Width = 25;
+        Length = 25;
+    }
+    else {
+        Width = width;
+        Length = length;
+    }
+    normalizeRect();
+    update();
+}
+
 QVector<QPointF> OrdinaryRectangle::handles() const{
     QVector<QPointF> result;
 
@@ -137,6 +151,7 @@ OrdinaryRectangle::HandleType OrdinaryRectangle::hitHandle(const QPointF &point,
 }
 
 Rectangle::Action OrdinaryRectangle::createAction(HandleType handle) {
+    prepareGeometryChange();
     switch (handle) {
     case HandleType::TopLeft:
         return [this](const QPointF &pos) {

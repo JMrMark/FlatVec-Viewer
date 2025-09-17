@@ -88,6 +88,51 @@ bool MainGraphicsView::insertNewFile(const QString &fileName, const QVector<Rect
     return true;
 }
 
+void MainGraphicsView::deleteCurrentRect() {
+    if (!currentRect) {
+        qDebug() << "Немає вибраного об'єкта для видалення";
+        return;
+    }
+
+    // 1. Прибрати зі сцени
+    m_scene->removeItem(currentRect);
+
+    // 2. Видалити з QMap по ключу (currentFilePath)
+    if (_AllFiles.contains(currentFilePath)) {
+        QVector<Rectangle*>& vec = _AllFiles[currentFilePath];
+        auto it = std::find(vec.begin(), vec.end(), currentRect);
+        if (it != vec.end()) {
+            vec.erase(it);
+            qDebug() << "Об'єкт видалено з _AllFiles[" << currentFilePath << "]";
+        } else {
+            qDebug() << "Об'єкт не знайдено у _AllFiles[" << currentFilePath << "]";
+        }
+    } else {
+        qDebug() << "Ключ" << currentFilePath << "не знайдено у _AllFiles";
+    }
+
+    // 3. Видалити сам об’єкт
+    delete currentRect;
+    currentRect = nullptr;
+
+    qDebug() << "Об'єкт успішно видалено";
+}
+
+void MainGraphicsView::setNewSizeToRect(float width, float length){
+    if (currentRect != nullptr){
+        currentRect->setSize(width, length);
+    }
+}
+
+void MainGraphicsView::updateRectInArea(Rectangle* rec){
+    const auto& rectangles = _AllFiles[currentFilePath];
+    for (auto* el : rectangles) {
+        if (el->collides(*rec, 8) && el != rec) {
+            el->update();
+        }
+    }
+}
+
 void MainGraphicsView::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton) {
         m_posBegin = mapToScene(event->pos());
@@ -103,6 +148,7 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
                 currentRect = includesPointSomeone(m_posBegin);
                 if (currentRect != nullptr) {
                     currentRect->setActivatedOn();
+                    emit rectangleSelected(currentRect->getWidth(), currentRect->getLength());
                     qDebug() << "Стан змінено";
                 }
             }
@@ -119,7 +165,11 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
 
                     if (currentRect != nullptr) {
                         currentRect->setActivatedOn();
+                        emit rectangleSelected(currentRect->getWidth(), currentRect->getLength());
                         qDebug() << "Стан змінено";
+                    }
+                    else {
+                        emit rectangleDeselected();
                     }
                 }
             }
@@ -209,6 +259,7 @@ void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
     else if (currentAction){
         QPointF currentPos = mapToScene(event->pos());
         currentAction(currentPos);
+        emit rectangleSelected(currentRect->getWidth(), currentRect->getLength());
     }
     else {
         QGraphicsView::mouseMoveEvent(event);
@@ -256,6 +307,7 @@ void MainGraphicsView::mouseReleaseEvent(QMouseEvent *event)
                 else {
                     currentRect->setActivatedOn();
                 }
+                emit rectangleSelected(currentRect->getWidth(), currentRect->getLength());
             }
 
             event->accept();
@@ -265,6 +317,7 @@ void MainGraphicsView::mouseReleaseEvent(QMouseEvent *event)
             if (includesRect(currentRect)){
                 currentRect->setErrorOn();
             }
+            emit rectangleSelected(currentRect->getWidth(), currentRect->getLength());
         }
     }
     else {
@@ -378,6 +431,14 @@ void MainGraphicsView::drawBackground(QPainter *painter, const QRectF &rect) {
     // Горизонтальні лінії
     for (qreal y = top; y <= bottom; y += gridStep) {
         painter->drawLine(QLineF(left, y, right, y));
+    }
+}
+
+void MainGraphicsView::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Delete) {
+        deleteCurrentRect();
+    } else {
+        QGraphicsView::keyPressEvent(event);
     }
 }
 

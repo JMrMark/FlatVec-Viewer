@@ -10,7 +10,11 @@ class CurvedRectangle: public Rectangle
 public:
     CurvedRectangle();
 
-    virtual bool collides(const Rectangle& other) const override;
+    float getWidth() const override {return 0;};
+    float getLength() const override {return 0;};
+    void setSize(float width, float length) override {};
+
+    virtual bool collides(const Rectangle& other, float overSize = 0) const override;
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -26,9 +30,9 @@ public:
 
 protected:
 
-    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const override;
-    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const override;
-    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c) const override;
+    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a, float overSize = 0) const override;
+    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b, float overSize = 0) const override;
+    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c, float overSize = 0) const override;
 
 };
 

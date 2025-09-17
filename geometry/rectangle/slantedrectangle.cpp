@@ -39,19 +39,19 @@ void SlantedRectangle::normalizeRect() {
     // Bark
 }
 
-bool SlantedRectangle::collides(const Rectangle& other) const {
-    return other.collidesWithSlantedRectangle(*this);
+bool SlantedRectangle::collides(const Rectangle& other, float overSize) const {
+    return other.collidesWithSlantedRectangle(*this, overSize);
 }
 
-bool SlantedRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a) const {
-    return a.collidesWithSlantedRectangle(*this);
+bool SlantedRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a, float overSize) const {
+    return a.collidesWithSlantedRectangle(*this, overSize);
 }
 
-bool SlantedRectangle::collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const {
-    return b.collidesWithSlantedRectangle(*this);
+bool SlantedRectangle::collidesWithOrdinaryRectangle(const OrdinaryRectangle& b, float overSize) const {
+    return b.collidesWithSlantedRectangle(*this, overSize);
 }
 
-bool SlantedRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c) const {
+bool SlantedRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c, float overSize) const {
 
     // Task Coll-Sr->Sr
 

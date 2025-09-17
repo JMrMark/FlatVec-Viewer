@@ -51,6 +51,13 @@ public:
     QMap<QString, QVector<Rectangle*>> getAllFiles() const
     { return _AllFiles; }
 
+    void deleteCurrentRect();
+
+    void setNewSizeToRect(float width, float length);
+
+    // Функція для пошуку сусідніх прямокутників і їх оновлення
+    void updateRectInArea(Rectangle* rec);
+
 protected:
     // Відслідковування миші
     void mousePressEvent(QMouseEvent *event) override;
@@ -63,6 +70,15 @@ protected:
 
     // Задній план сцени
     void drawBackground(QPainter *painter, const QRectF &rect) override;
+
+    // Відслідковування натиснутої кнопки на клавіатурі
+    void keyPressEvent(QKeyEvent *event) override;
+
+signals:
+    void rectangleSelected(float width, float length);
+    void rectangleDeselected();
+
+    //void rectangleError() {m_currentGeometry = GeometryType::None; };
 
 private:
 

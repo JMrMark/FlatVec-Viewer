@@ -28,6 +28,11 @@ public:
     using QGraphicsItem::QGraphicsItem;
     Rectangle();
 
+    // ---= Розмір фігури =--- //
+    virtual float getWidth() const = 0;
+    virtual float getLength() const = 0;
+    virtual void setSize(float width, float length) = 0;
+
     // ---= Взаємодія прямокутника з точкою =--- //
     virtual bool includesPoint(const QPointF &point) const = 0;
     virtual bool includesPoint(const QPointF &point, float overSize) const = 0;
@@ -62,11 +67,11 @@ public:
     virtual void normalizeRect() = 0;
 
     // ---= Взаємодія прямокутників =--- //
-    virtual bool collides(const Rectangle& other) const = 0;
+    virtual bool collides(const Rectangle& other, float overSize = 0) const = 0;
 
-    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a) const = 0;
-    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const = 0;
-    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c) const = 0;
+    virtual bool collidesWithCurvedRectangle(const CurvedRectangle& a, float overSize = 0) const = 0;
+    virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b, float overSize = 0) const = 0;
+    virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c, float overSize = 0) const = 0;
 
     virtual ~Rectangle() = default;
 

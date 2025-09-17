@@ -2,8 +2,8 @@
 
 CurvedRectangle::CurvedRectangle() {}
 
-bool CurvedRectangle::collides(const Rectangle& other) const {
-    return other.collidesWithCurvedRectangle(*this);
+bool CurvedRectangle::collides(const Rectangle& other, float overSize) const {
+    return other.collidesWithCurvedRectangle(*this, overSize);
 }
 
 bool CurvedRectangle::includesPoint(const QPointF &point) const {
@@ -41,21 +41,21 @@ void CurvedRectangle::normalizeRect() {
     // Mya
 }
 
-bool CurvedRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a) const {
+bool CurvedRectangle::collidesWithCurvedRectangle(const CurvedRectangle& a, float overSize) const {
 
     // Task Coll-Cr->Cr
 
     return true;
 }
 
-bool CurvedRectangle::collidesWithOrdinaryRectangle(const OrdinaryRectangle& b) const {
+bool CurvedRectangle::collidesWithOrdinaryRectangle(const OrdinaryRectangle& b, float overSize) const {
 
     // Task Coll-Cr->Or
 
     return true;
 }
 
-bool CurvedRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c) const {
+bool CurvedRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c, float overSize) const {
 
     // Task Coll-Cr->Sr
 
