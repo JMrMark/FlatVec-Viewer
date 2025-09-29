@@ -31,10 +31,26 @@ Rectangle::HandleType CurvedRectangle::hitHandle(const QPointF &point, qreal rad
     return HandleType::None;
 }
 
+Rectangle* CurvedRectangle::handleZone(HandleType handle) const {
+    return nullptr;
+}
+
+Rectangle::ActionRender CurvedRectangle::RenderZone(const HandleType handle) const {
+    return [this]() {
+        qDebug() << "Nothing";
+        QVector<Rectangle*> vec;
+        return vec;
+    };
+}
+
 Rectangle::Action CurvedRectangle::createAction(HandleType handle){
     return [this](const QPointF &pos) {
         qDebug() << "Nothing";
     };
+}
+
+void CurvedRectangle::refuseAction() {
+    // Just put TR data to its own data
 }
 
 void CurvedRectangle::normalizeRect() {
@@ -62,6 +78,13 @@ bool CurvedRectangle::collidesWithSlantedRectangle(const SlantedRectangle& c, fl
     return true;
 }
 
+void CurvedRectangle::TempRectangleFill() {
+    // Just put your data into TR data
+}
+
+void CurvedRectangle::TempRectangleNormalize() {
+    // Just normalize TR data
+}
 
 // Тимчасово!
 QRectF CurvedRectangle::boundingRect() const {

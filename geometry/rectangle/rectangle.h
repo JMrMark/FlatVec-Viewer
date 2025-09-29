@@ -1,3 +1,37 @@
+#pragma once
+
+/*
+ * Радіус, який застосовується для пошуку сусідніх об'єктів
+ * Застосування: оптимізація взаємодії з об'єктами
+*/
+#define RENDER_RADIUS_ZONE 150
+
+/*
+ * Радіус, який застосувується для перерахунку області
+ * взаємодії з іншими об'єктами.
+ * Повинен бути меншим за RENDER_RADIUS_ZONE
+ * Застосування: оптимізація взаємодії з об'єктами
+*/
+#define RENDER_RADIUS_UPDATE_ZONE 100
+
+/*
+ * Структура необхідна для перехідного етапу прямокутника.
+ * Зберігає у собі тимчасові значення прямокутників.
+ * Застосовується при зміні станів:
+ *  * Стан 1 - створення та запис тимчасових даних
+ *  * Стан 0 - видалення об'єкту та очищення пам'яті
+*/
+struct TempRectangle {
+    int x = 0;
+    int y = 0;
+    int width = 0;
+    int length = 0;
+
+    void clear() {
+        x = y = width = length = 0;
+    }
+};
+
 /*
  * Клас є абстрактним
  * Він наслідується в усі похідні прямокутники,
@@ -7,7 +41,6 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#pragma once
 //#include "curvedrectangle.h"
 //#include "ordinaryrectangle.h"
 //#include "slantedrectangle.h"
@@ -29,19 +62,19 @@ public:
     Rectangle();
 
     // ---= Розмір фігури =--- //
-    virtual float getWidth() const = 0;
-    virtual float getLength() const = 0;
-    virtual void setSize(float width, float length) = 0;
+    virtual float   getWidth()  const = 0;
+    virtual float   getLength() const = 0;
+    virtual void    setSize(float width, float length) = 0;
 
     // ---= Взаємодія прямокутника з точкою =--- //
     virtual bool includesPoint(const QPointF &point) const = 0;
     virtual bool includesPoint(const QPointF &point, float overSize) const = 0;
 
     // ---= Стан прямокутника =--- //
-    inline void setActivatedOff()   {CurrentState = 0; update();}
-    inline void setActivatedOn()    {CurrentState = 1; update();}
-    inline void setSelectedOn()     {CurrentState = 2; update();}
-    inline void setErrorOn()        {CurrentState = 3; update();}
+    inline void setActivatedOff()   {CurrentState = 0; TempRectangleDelete(); update();}
+    inline void setActivatedOn()    {CurrentState = 1; TempRectangleCreate(); TempRectangleFill(); update();}
+    inline void setSelectedOn()     {CurrentState = 2; TempRectangleCreate(); TempRectangleFill(); update();}
+    inline void setErrorOn()        {CurrentState = 3; TempRectangleCreate(); TempRectangleFill(); update();}
 
     // Стан потрібен для підвантаження стилю
     // 0 - StdStyleRect
@@ -58,11 +91,34 @@ public:
         None
     };
 
+    TempRectangle*  _TempRectangle = nullptr;
+
+    virtual void    TempRectangleFill() = 0;
+    virtual void    TempRectangleNormalize() = 0;
+    void            TempRectangleCreate();
+    void            TempRectangleDelete();
+
+    /*
+     * Обрахунок зони рендеру. Повертає:
+     *  - Перший прямокутник: Зона взаємодії з об'єктами
+     *  - Другий прямокутник: Зона оновлення "Зони взаємодії з об'єктами"
+    */
+    using   ActionRender = std::function<QVector<Rectangle*>()>;
+    virtual ActionRender RenderZone(const HandleType handle) const = 0;
+
+    //rectangle.cpp.obj:-1: помилка: LNK2001: unresolved external symbol "public: virtual class std::function<class QList<class Rectangle *> __cdecl(void)> __cdecl Rectangle::RenderZone(enum Rectangle::HandleType)const " (?RenderZone@Rectangle@@UEBA?AV?$function@$$A6A?AV?$QList@PEAVRectangle@@@@XZ@std@@W4HandleType@1@@Z)
+
+    /*
+     * Модифікація прямокутника за рахунок взаємодії з
+     * хендлами (точками на прямокутнику)
+    */
+    using   Action = std::function<void(const QPointF &mousePos)>;
+    virtual Action createAction(HandleType handle) = 0;
+    virtual void   refuseAction() = 0;
+
     virtual QVector<QPointF> handles() const = 0;
     virtual HandleType hitHandle(const QPointF &point, qreal radius = 8.0) const = 0;
-
-    using Action = std::function<void(const QPointF &mousePos)>;
-    virtual Action createAction(HandleType handle) = 0;
+    virtual Rectangle* handleZone(HandleType handle) const = 0;
 
     virtual void normalizeRect() = 0;
 
@@ -73,7 +129,11 @@ public:
     virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b, float overSize = 0) const = 0;
     virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c, float overSize = 0) const = 0;
 
-    virtual ~Rectangle() = default;
+    virtual ~Rectangle() {
+        if (_TempRectangle != nullptr) {
+            delete _TempRectangle;
+        }
+    }
 
 };
 

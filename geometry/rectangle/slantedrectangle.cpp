@@ -19,6 +19,14 @@ bool SlantedRectangle::includesPoint(const QPointF &point, float overSize) const
     return true;
 }
 
+void SlantedRectangle::TempRectangleFill() {
+    // Just put your data into TR data
+}
+
+void SlantedRectangle::TempRectangleNormalize() {
+    // Just normalize TR data
+}
+
 QVector<QPointF> SlantedRectangle::handles() const{
     // None for now
     QVector<QPointF> p;
@@ -29,10 +37,26 @@ Rectangle::HandleType SlantedRectangle::hitHandle(const QPointF &point, qreal ra
     return HandleType::None;
 }
 
+Rectangle* SlantedRectangle::handleZone(HandleType handle) const {
+    return nullptr;
+}
+
+Rectangle::ActionRender SlantedRectangle::RenderZone(const HandleType handle) const {
+    return [this]() {
+        qDebug() << "Nothing";
+        QVector<Rectangle*> vec;
+        return vec;
+    };
+}
+
 Rectangle::Action SlantedRectangle::createAction(HandleType handle){
     return [this](const QPointF &pos) {
         qDebug() << "Nothing";
     };
+}
+
+void SlantedRectangle::refuseAction() {
+    // Just put TR data to its own data
 }
 
 void SlantedRectangle::normalizeRect() {

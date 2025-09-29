@@ -44,6 +44,10 @@ QVector<Rectangle*>& MainGraphicsView::currentRectangles() {
 }
 
 MainGraphicsView::~MainGraphicsView(){
+    if (currentRect != nullptr) {
+        delete currentRect;
+    }
+
     for (auto& scene : _AllFiles) {
         for (auto* rect : scene) {
             m_scene->removeItem(rect);
@@ -156,6 +160,7 @@ void MainGraphicsView::mousePressEvent(QMouseEvent *event){
                 if (currentRect->includesPoint(m_posBegin, 8.0)){
                     auto handle = currentRect->hitHandle(m_posBegin);
                     currentAction = currentRect->createAction(handle);
+                    currentActionRender = currentRect->RenderZone(handle);
                 }
                 else {
                     currentRect->setActivatedOff();
@@ -259,6 +264,25 @@ void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
     else if (currentAction){
         QPointF currentPos = mapToScene(event->pos());
         currentAction(currentPos);
+
+        // Логіка оптимізації пошуку сусідніх об'єктів буде тут
+        // Перевірка чи кеш пустий, чи ми вийшли за область рендеренгу
+        // currentActionRender() - поверне область пошуку
+        // (область пошуку).collides() - отримуємо всі об'єкти в зоні
+        // Кешування цих об'єктів
+
+        // Взаємодія з кешом
+
+
+        // Тимчасово
+        // includesRect(currentRect) - буде заміна на перевідку про колайд з об'єктами в кеші
+        if (!includesRect(currentRect)) {
+            currentRect->update();
+        }
+        else {
+            currentRect->refuseAction();
+        }
+
         emit rectangleSelected(currentRect->getWidth(), currentRect->getLength());
     }
     else {
@@ -455,7 +479,8 @@ Rectangle* MainGraphicsView::includesPointSomeone(const QPointF &pos) const {
 bool MainGraphicsView::includesRect(const Rectangle* rec) const{
     const auto& rectangles = _AllFiles[currentFilePath];
     for (auto* el : rectangles) {
-        if (el->collides(*rec) && el != rec) {
+        if (el->collides(*rec)) {
+            if (el == rec) continue;
             return true;
         }
     }

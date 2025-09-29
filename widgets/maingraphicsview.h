@@ -95,8 +95,9 @@ private:
     QPointF m_posNow;
 
     // Змінна для моніторингу активного прямокутника (зменшує навантаження на процесор)
-    Rectangle* currentRect = nullptr;
-    Rectangle::Action currentAction = nullptr;
+    Rectangle*              currentRect         = nullptr;
+    Rectangle::Action       currentAction       = nullptr;
+    Rectangle::ActionRender currentActionRender = nullptr;
 
     // just now for test
     QVector<float> now;

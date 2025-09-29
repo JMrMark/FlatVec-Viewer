@@ -24,9 +24,17 @@ public:
 
     QVector<QPointF> handles() const override;
     HandleType hitHandle(const QPointF &point, qreal radius = 8.0) const override;
+    Rectangle* handleZone(HandleType handle) const override;
+
+    ActionRender RenderZone(const HandleType handle) const override;
+
     Action createAction(HandleType handle) override;
+    void refuseAction() override;
 
     void normalizeRect() override;
+
+    void TempRectangleFill() override;
+    void TempRectangleNormalize() override;
 
 protected:
 
