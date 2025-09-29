@@ -1,11 +1,15 @@
 # FlatVec-Viewer
 
 **Реалізація взаємодії зі сценою прописана у:**
+
 \geometry\rectangle - rectangle.h/cpp
+
 					  ordinaryrectangle.h/cpp
+					  
 					  ...
 					  
 \widgets - maingraphicsview.h/cpp
+
 		   treecontroller.h/cpp
 
 **==== Класи ====**
