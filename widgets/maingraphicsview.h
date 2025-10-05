@@ -24,39 +24,61 @@ public:
 
     ~MainGraphicsView();
 
+    /* --- Робота з файлами --- */
+
+    // Повернення усіх файлів та їх даних
+    QMap<QString, QVector<Rectangle*>> getAllFiles() const
+    { return _AllFiles; }
+
+    // Створення нового файлу
+    void createNewPaintFile(QString file_name);
+
+    // Повернення розміщення об'єктів на сцені терерішнього файлу
+    QVector<Rectangle*>& currentRectangles();
+
+    // Повернення теперішнього файлу
+    QString getCurrentFilePath()
+    { return currentFilePath; }
+
     // Ініціалізація нового файлу та його вектора (Не перевірена)
     bool insertNewFile(const QString &fileName, const QVector<Rectangle*> vec);
 
     // Метод отримує назву файлу та у результаті повертає вектор даних полотна
     QVector<Rectangle*> getSelectedVector(const QString &filePath);
 
-    // Малює фігуру
+    /* --- Логіка взаємодії фігур --- */
+
+    /* Перевірка чи містить хоч один прямокутник задану точку.
+     * Якщо так, то повертає вказівник на цей об'єкт.
+     * Якщо ні, то повертає nullptr (обов'язково перевіряйте!). */
+    Rectangle*  includesPointSomeone(const QPointF &pos) const;
+
+    /* Перевірка чи перетинаються (налазать) об'єкти з заданим об'єктом.
+     * Якщо так, то повертається значення true
+     * Якщо ні, то повертається значення false */
+    bool        includesRect(const Rectangle* rec) const;
+
+    /* --- Зображення об'єктів на сцені --- */
+
+    // Малює фігуру на сцені
     void drawFigure(QGraphicsItem* item);
 
-    Rectangle* includesPointSomeone(const QPointF &pos) const;
-    bool includesRect(const Rectangle* rec) const;
+    // Видаляє фігуру зі сцени
+    void deleteCurrentRect();
 
-    // Повертає вказівник на фігуру (Завжди перевіряти чи не рівний nullptr!!!)
-    Rectangle* includesPointRectangle(const QPointF &pos) const;
+    /* --- Оптимізація взаємодії між об'єктами --- */
+
+    // Використовує CurrentRect для заповнення RectanglesInRenderZone.
+    // (оновлення RectanglesInRenderZone)
+    void updateRectanglesInRenderZone();
+
+    // Функція для пошуку сусідніх прямокутників і їх оновлення
+    void updateRectInArea(Rectangle* rec);
 
     bool setCurrentGeometry(GeometryType type);
     Rectangle* createRectangleFromType(QRectF rect);
 
-    void createNewPaintFile(QString file_name);
-    QVector<Rectangle*>& currentRectangles();
-
-    QString getCurrentFilePath()
-    { return currentFilePath; }
-
-    QMap<QString, QVector<Rectangle*>> getAllFiles() const
-    { return _AllFiles; }
-
-    void deleteCurrentRect();
-
     void setNewSizeToRect(float width, float length);
-
-    // Функція для пошуку сусідніх прямокутників і їх оновлення
-    void updateRectInArea(Rectangle* rec);
 
 protected:
     // Відслідковування миші
@@ -82,30 +104,39 @@ signals:
 
 private:
 
+    // Шлях до файлу, який зараз відкрито
+    // Std_file - ніякий файл не відкрито
     QString currentFilePath = "Std_file";
 
+    /* --- Створення об'єктів на сцені --- */
+
+    // Обраний тип прямокутника користувачем
     GeometryType m_currentGeometry = GeometryType::None;
+
+    // Тимчасово! (QGraphicsRectItem буде замінено на Rectangle*)
+    // Використовується як тимчасовий об'єкт під час створення нового об'єкту
     QGraphicsRectItem* m_tempRectItem = nullptr;
 
-    bool m_panning = false;
-    QPoint m_lastMousePos;
-
+    /* --- Змінні, які потрібні для корегування взаємодії користувача зі сценою з використанням миші --- */
+    bool m_panning  = false;
     bool m_tracking = false;
+    QPoint  m_lastMousePos;
     QPointF m_posBegin;
     QPointF m_posNow;
 
+    /* --- Оптимізація модифікації, переміщення та взаємодії об'єктів --- */
     // Змінна для моніторингу активного прямокутника (зменшує навантаження на процесор)
     Rectangle*              currentRect         = nullptr;
     Rectangle::Action       currentAction       = nullptr;
     Rectangle::ActionRender currentActionRender = nullptr;
-
-    // just now for test
-    QVector<float> now;
+    QVector<Rectangle*>     RectanglesInRenderZone;
 
     qreal currentScale = 1.0;
 
+    // Вказівник на сцену
     QGraphicsScene      *m_scene = nullptr;
 
+    // Основний компонент! Зберігає у собі назви файлів та об'єкти сцен
     QMap<QString, QVector<Rectangle*>> _AllFiles;
 
     QVector<BoxLine*>   _BoxLines;

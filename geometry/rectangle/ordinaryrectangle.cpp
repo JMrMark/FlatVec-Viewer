@@ -173,116 +173,20 @@ OrdinaryRectangle::HandleType OrdinaryRectangle::hitHandle(const QPointF &point,
     return HandleType::None;
 }
 
-/*    enum HandleType {
-        TopLeft,    TopMiddle,    TopRight,
-        MiddleLeft, Center,       MiddleRight,
-        BottomLeft, BottomMiddle, BottomRight,
-        None
-    };
-*/
-// Переписати під RENDER_RADIUS_ZONE
-Rectangle* OrdinaryRectangle::handleZone(HandleType handle) const {
-
-    const float SCENE_LEFT   = 0.0f;
-    const float SCENE_TOP    = 0.0f;
-    const float SCENE_RIGHT  = 1000.0f;
-    const float SCENE_BOTTOM = 1000.0f;
-
-    const float ZONE_THICKNESS = 10.0f; // товщина зони для хендла
-
-    float zoneX = 0.0f;
-    float zoneY = 0.0f;
-    float zoneW = 0.0f;
-    float zoneH = 0.0f;
-
-    switch (handle) {
-    case HandleType::TopLeft:
-        zoneX = std::max(X - RENDER_RADIUS_ZONE, SCENE_LEFT);
-        zoneY = std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP);
-        zoneW = X - zoneX + Width;
-        zoneH = Y - zoneY + Length;
-        break;
-
-    case HandleType::TopMiddle:
-        zoneX = X;
-        zoneY = std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP);
-        zoneW = Width;
-        zoneH = (Y - std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP) + Length);
-        break;
-
-    case HandleType::TopRight:
-        zoneX = X;
-        zoneY = std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP);
-        zoneW = Width + RENDER_RADIUS_ZONE;
-        zoneH = (Y - std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP) + Length);
-        break;
-
-    case HandleType::BottomMiddle:
-        zoneX = X;
-        zoneY = Y;
-        zoneW = Width;
-        zoneH = RENDER_RADIUS_ZONE + Length;
-        break;
-
-    case HandleType::BottomRight:
-        zoneX = X;
-        zoneY = Y;
-        zoneW = RENDER_RADIUS_ZONE + Width;
-        zoneH = RENDER_RADIUS_ZONE + Length;
-        break;
-
-    case HandleType::MiddleLeft:
-        zoneX = std::max(X - RENDER_RADIUS_ZONE, SCENE_LEFT);
-        zoneY = Y;
-        zoneW = (X - RENDER_RADIUS_ZONE <= 0) ? (X + Width) : (RENDER_RADIUS_ZONE + Width);
-        zoneH = Length;
-        break;
-
-    case HandleType::Center:
-        zoneX = std::max(X - RENDER_RADIUS_ZONE, 0.0f);
-        zoneY = std::max(Y - RENDER_RADIUS_ZONE, 0.0f);
-        zoneW = Width + 2 * RENDER_RADIUS_ZONE;
-        zoneH = Length + 2 * RENDER_RADIUS_ZONE;
-        break;
-
-    case HandleType::MiddleRight:
-        zoneX = X;
-        zoneY = Y;
-        zoneW = X + RENDER_RADIUS_ZONE;
-        zoneH = Length;
-        break;
-
-    case HandleType::BottomLeft:
-        zoneX = std::max(X - RENDER_RADIUS_ZONE, SCENE_LEFT);
-        zoneY = Y;
-        zoneW = (X - RENDER_RADIUS_ZONE <= 0) ? (X + Width) : (RENDER_RADIUS_ZONE + Width);
-        zoneH = RENDER_RADIUS_ZONE + Length;
-        break;
-
-    default:
-        return nullptr;
-    }
-
-    // Створюємо новий прямокутник як зону (OrdinaryRectangle)
-    return new OrdinaryRectangle(zoneX, zoneY, zoneW, zoneH);
-}
-
 Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) const {
     // Тут є баг, що зона може виходити за межі сцени по Width та Length
     // Але я хз чи то треба фіксити, бо коду буде більше, а результат
     // і так ніхто не побачить, крім тебе, бо ти це читаєш =)
 
-    QVector<Rectangle*> vec;
-
-    const float SCENE_LEFT   = 0.0f;
-    const float SCENE_TOP    = 0.0f;
-    const float SCENE_RIGHT  = 1000.0f;
-    const float SCENE_BOTTOM = 1000.0f;
-
     switch (handle){
     case HandleType::TopLeft:
         return [&]() {
+            qDebug() << "In switch started!";
 
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;QVector<Rectangle*> vec;
             vec.append(new OrdinaryRectangle(
                   std::max(X - RENDER_RADIUS_ZONE, SCENE_LEFT)
                 , std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP)
@@ -295,12 +199,18 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
                 , X - std::max(X - RENDER_RADIUS_UPDATE_ZONE, SCENE_LEFT) + Width
                 , Y - std::max(Y - RENDER_RADIUS_UPDATE_ZONE, SCENE_TOP) + Length));
 
+            qDebug() << "Vec size is: " << vec.size();
+
             return vec;
         };
 
     case HandleType::TopMiddle:
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   X
                 , std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP)
@@ -319,7 +229,11 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
     case HandleType::TopRight:
 
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   X
                 , std::max(Y - RENDER_RADIUS_ZONE, SCENE_TOP)
@@ -337,7 +251,11 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
 
     case HandleType::MiddleLeft:
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   std::max(X - RENDER_RADIUS_ZONE, SCENE_LEFT)
                 , Y
@@ -355,7 +273,11 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
 
     case HandleType::Center:
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   std::max(X - RENDER_RADIUS_ZONE, 0.0f)
                 , std::max(Y - RENDER_RADIUS_ZONE, 0.0f)
@@ -373,17 +295,21 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
 
     case HandleType::MiddleRight:
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   X
                 , Y
-                , X + RENDER_RADIUS_ZONE
+                , Width + RENDER_RADIUS_ZONE
                 , Length));
 
             vec.append(new OrdinaryRectangle(
                   X
                 , Y
-                , X + RENDER_RADIUS_UPDATE_ZONE
+                , Width + RENDER_RADIUS_UPDATE_ZONE
                 , Length));
 
             return vec;
@@ -391,7 +317,11 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
 
     case HandleType::BottomLeft:
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   std::max(X - RENDER_RADIUS_ZONE, SCENE_LEFT)
                 , Y
@@ -409,7 +339,11 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
 
     case HandleType::BottomMiddle:
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   X
                 , Y
@@ -427,7 +361,11 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
 
     case HandleType::BottomRight:
         return [&]() {
-
+            QVector<Rectangle*> vec;
+            const float SCENE_LEFT   = 0.0f;
+            const float SCENE_TOP    = 0.0f;
+            const float SCENE_RIGHT  = 1000.0f;
+            const float SCENE_BOTTOM = 1000.0f;
             vec.append(new OrdinaryRectangle(
                   X
                 , Y
@@ -444,7 +382,8 @@ Rectangle::ActionRender OrdinaryRectangle::RenderZone(const HandleType handle) c
         };
 
     default:
-        return nullptr;
+        qDebug() << "func: error";
+        return []() { return QVector<Rectangle*>(); };
     }
 }
 
@@ -538,6 +477,30 @@ void OrdinaryRectangle::refuseAction() {
     Width = _TempRectangle->width;
     Length = _TempRectangle->length;
     update();
+}
+
+bool OrdinaryRectangle::renderZoneUpdateValidation() const {
+
+    if (_TempRectangle == nullptr) return false;
+
+    const Rectangle* baseRect = _TempRectangle->getRenderZoneUpdate();
+    if (!baseRect) {
+        return false;
+    }
+    const OrdinaryRectangle* tpr = static_cast<const OrdinaryRectangle*>(baseRect);
+
+    if (!tpr) {
+        qDebug() << "dynamic_cast FAILED! base type is not OrdinaryRectangle.";
+        return false;
+    }
+
+    // Якщо наш прямокутник ВИХОДИТЬ за межі tpr -> повертаємо true
+    if (X < tpr->getX()) return true;  // виліз вліво
+    if (Y < tpr->getY()) return true;  // виліз вгору
+    if (X + Width > tpr->getX() + tpr->getWidth()) return true;  // виліз вправо
+    if (Y + Length > tpr->getY() + tpr->getLength()) return true;  // виліз вниз
+
+    return false; // все ще в межах
 }
 
 void OrdinaryRectangle::normalizeRect() {

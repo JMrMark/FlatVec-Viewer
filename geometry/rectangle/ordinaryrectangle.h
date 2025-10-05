@@ -22,18 +22,21 @@ public:
     void setDimensions(float width, float length);
     void setPosition(float x, float y);
 
+    float getX() const { return X; }
+    float getY() const { return Y; }
     float getWidth() const override { return Width; };
     float getLength() const override { return Length; };
     void setSize(float width, float length) override;
 
     QVector<QPointF> handles() const override;
     HandleType hitHandle(const QPointF &point, qreal radius = 8.0) const override;
-    Rectangle* handleZone(HandleType handle) const override;
 
     ActionRender RenderZone(const HandleType handle) const override;
 
     Action createAction(HandleType handle) override;
     void refuseAction() override;
+
+    bool renderZoneUpdateValidation() const override;
 
     void normalizeRect() override;
 

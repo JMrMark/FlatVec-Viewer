@@ -31,10 +31,6 @@ Rectangle::HandleType CurvedRectangle::hitHandle(const QPointF &point, qreal rad
     return HandleType::None;
 }
 
-Rectangle* CurvedRectangle::handleZone(HandleType handle) const {
-    return nullptr;
-}
-
 Rectangle::ActionRender CurvedRectangle::RenderZone(const HandleType handle) const {
     return [this]() {
         qDebug() << "Nothing";
@@ -51,6 +47,13 @@ Rectangle::Action CurvedRectangle::createAction(HandleType handle){
 
 void CurvedRectangle::refuseAction() {
     // Just put TR data to its own data
+}
+
+bool CurvedRectangle::renderZoneUpdateValidation() const {
+
+    // перевірка чи прямокутник не вийшов за межі RenderUpdateZone
+
+    return false;
 }
 
 void CurvedRectangle::normalizeRect() {

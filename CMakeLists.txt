@@ -38,6 +38,7 @@ add_library(rectangle_logic STATIC
     geometry/rectangle/curvedrectangle.cpp geometry/rectangle/curvedrectangle.h
     geometry/rectangle/ordinaryrectangle.cpp geometry/rectangle/ordinaryrectangle.h
     geometry/rectangle/slantedrectangle.cpp geometry/rectangle/slantedrectangle.h
+    geometry/rectangle/temprectangle.h geometry/rectangle/temprectangle.cpp
     styles/stylemanager.h styles/stylemanager.cpp
 )
 
@@ -63,6 +64,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         geometry/rectangle/curvedrectangle.h geometry/rectangle/curvedrectangle.cpp
         geometry/rectangle/ordinaryrectangle.h geometry/rectangle/ordinaryrectangle.cpp
         geometry/rectangle/slantedrectangle.h geometry/rectangle/slantedrectangle.cpp
+        geometry/rectangle/temprectangle.h geometry/rectangle/temprectangle.cpp
         geometry/line/boxline.h geometry/line/boxline.cpp
 
         datamanagement/filemanager.h datamanagement/filemanager.cpp
