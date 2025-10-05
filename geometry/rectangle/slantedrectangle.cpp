@@ -37,10 +37,6 @@ Rectangle::HandleType SlantedRectangle::hitHandle(const QPointF &point, qreal ra
     return HandleType::None;
 }
 
-Rectangle* SlantedRectangle::handleZone(HandleType handle) const {
-    return nullptr;
-}
-
 Rectangle::ActionRender SlantedRectangle::RenderZone(const HandleType handle) const {
     return [this]() {
         qDebug() << "Nothing";
@@ -57,6 +53,13 @@ Rectangle::Action SlantedRectangle::createAction(HandleType handle){
 
 void SlantedRectangle::refuseAction() {
     // Just put TR data to its own data
+}
+
+bool SlantedRectangle::renderZoneUpdateValidation() const {
+
+    // перевірка чи прямокутник не вийшов за межі RenderUpdateZone
+
+    return false;
 }
 
 void SlantedRectangle::normalizeRect() {

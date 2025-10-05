@@ -15,24 +15,6 @@
 #define RENDER_RADIUS_UPDATE_ZONE 100
 
 /*
- * Структура необхідна для перехідного етапу прямокутника.
- * Зберігає у собі тимчасові значення прямокутників.
- * Застосовується при зміні станів:
- *  * Стан 1 - створення та запис тимчасових даних
- *  * Стан 0 - видалення об'єкту та очищення пам'яті
-*/
-struct TempRectangle {
-    int x = 0;
-    int y = 0;
-    int width = 0;
-    int length = 0;
-
-    void clear() {
-        x = y = width = length = 0;
-    }
-};
-
-/*
  * Клас є абстрактним
  * Він наслідується в усі похідні прямокутники,
  * Використовується для подвійної диспетчеризації (double dispatch)
@@ -41,15 +23,13 @@ struct TempRectangle {
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-//#include "curvedrectangle.h"
-//#include "ordinaryrectangle.h"
-//#include "slantedrectangle.h"
-
 #include <QString>
 #include <QPointF>
 
 #include <QGraphicsItem>
 #include <QPainter>
+
+#include "temprectangle.h"
 
 class CurvedRectangle;
 class OrdinaryRectangle;
@@ -91,6 +71,13 @@ public:
         None
     };
 
+    /*
+    * Вказівник необхідний для перехідного етапу прямокутника.
+    * Зберігає у собі тимчасові значення прямокутників. (включно з зонами рендеренгу)
+    * Застосовується при зміні станів:
+    *  * Стан "не 0" - створення та запис тимчасових даних
+    *  * Стан 0 - видалення об'єкту та очищення пам'яті
+    */
     TempRectangle*  _TempRectangle = nullptr;
 
     virtual void    TempRectangleFill() = 0;
@@ -106,7 +93,17 @@ public:
     using   ActionRender = std::function<QVector<Rectangle*>()>;
     virtual ActionRender RenderZone(const HandleType handle) const = 0;
 
-    //rectangle.cpp.obj:-1: помилка: LNK2001: unresolved external symbol "public: virtual class std::function<class QList<class Rectangle *> __cdecl(void)> __cdecl Rectangle::RenderZone(enum Rectangle::HandleType)const " (?RenderZone@Rectangle@@UEBA?AV?$function@$$A6A?AV?$QList@PEAVRectangle@@@@XZ@std@@W4HandleType@1@@Z)
+    // Перевіряємо чи потрібно обновляти зону рендеренгу (якщо true - то так)
+    virtual bool renderZoneUpdateValidation() const = 0;
+
+    // Перевіряємо чи зони рендеренгу ініціалізовані
+    bool RenderZoneExist();
+
+    // Оновлюємо зони рендеренгу
+    void RenderZoneUpdate(const QVector<Rectangle*> &vrz);
+
+    // Отримуємо зону рендеренгу [0]
+    Rectangle* RenderZoneGet();
 
     /*
      * Модифікація прямокутника за рахунок взаємодії з
@@ -118,7 +115,6 @@ public:
 
     virtual QVector<QPointF> handles() const = 0;
     virtual HandleType hitHandle(const QPointF &point, qreal radius = 8.0) const = 0;
-    virtual Rectangle* handleZone(HandleType handle) const = 0;
 
     virtual void normalizeRect() = 0;
 
@@ -129,11 +125,7 @@ public:
     virtual bool collidesWithOrdinaryRectangle(const OrdinaryRectangle& b, float overSize = 0) const = 0;
     virtual bool collidesWithSlantedRectangle(const SlantedRectangle& c, float overSize = 0) const = 0;
 
-    virtual ~Rectangle() {
-        if (_TempRectangle != nullptr) {
-            delete _TempRectangle;
-        }
-    }
+    virtual ~Rectangle();
 
 };
 

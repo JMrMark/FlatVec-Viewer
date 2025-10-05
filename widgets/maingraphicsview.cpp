@@ -48,6 +48,10 @@ MainGraphicsView::~MainGraphicsView(){
         delete currentRect;
     }
 
+    for (auto *el : RectanglesInRenderZone){
+        delete el;
+    }
+
     for (auto& scene : _AllFiles) {
         for (auto* rect : scene) {
             m_scene->removeItem(rect);
@@ -124,6 +128,13 @@ void MainGraphicsView::deleteCurrentRect() {
 
 void MainGraphicsView::setNewSizeToRect(float width, float length){
     if (currentRect != nullptr){
+
+        // Потрібно додати логіку перевірки чи при змінні
+        // розмірів він не налазить на когось
+        // Якщо налазить, то робимо його на максимум наближеним до того прямокутника
+        // та відсилаємо сигнал на поля вводу
+        // Якщо ні, то змінюємо його розмір.
+
         currentRect->setSize(width, length);
     }
 }
@@ -261,26 +272,34 @@ void MainGraphicsView::mouseMoveEvent(QMouseEvent *event)
 
         event->accept();
     }
-    else if (currentAction){
+    else if (currentAction && currentActionRender){
         QPointF currentPos = mapToScene(event->pos());
         currentAction(currentPos);
 
-        // Логіка оптимізації пошуку сусідніх об'єктів буде тут
-        // Перевірка чи кеш пустий, чи ми вийшли за область рендеренгу
-        // currentActionRender() - поверне область пошуку
-        // (область пошуку).collides() - отримуємо всі об'єкти в зоні
-        // Кешування цих об'єктів
 
-        // Взаємодія з кешом
-
-
-        // Тимчасово
-        // includesRect(currentRect) - буде заміна на перевідку про колайд з об'єктами в кеші
-        if (!includesRect(currentRect)) {
-            currentRect->update();
+        if (currentRect->RenderZoneExist()){
+            if (currentRect->renderZoneUpdateValidation()){
+                currentRect->RenderZoneUpdate(currentActionRender());
+                updateRectanglesInRenderZone();
+            }
         }
         else {
+            currentRect->RenderZoneUpdate(currentActionRender());
+            updateRectanglesInRenderZone();
+        }
+
+        bool doesCollide = false;
+        for (auto &el : RectanglesInRenderZone){
+            if (currentRect->collides(*el)){
+                doesCollide = true;
+            }
+        }
+
+        if (doesCollide) {
             currentRect->refuseAction();
+        }
+        else {
+            currentRect->update();
         }
 
         emit rectangleSelected(currentRect->getWidth(), currentRect->getLength());
@@ -487,14 +506,19 @@ bool MainGraphicsView::includesRect(const Rectangle* rec) const{
     return false;
 }
 
-Rectangle* MainGraphicsView::includesPointRectangle(const QPointF &pos) const {
+void MainGraphicsView::updateRectanglesInRenderZone(){
+    if (currentRect == nullptr) return;
+    RectanglesInRenderZone.clear();
     const auto& rectangles = _AllFiles[currentFilePath];
+    Rectangle* crz = currentRect->RenderZoneGet();
+    if (crz == nullptr) return;
     for (auto* el : rectangles) {
-        if (el->includesPoint(pos)) {
-            return el;
+        if (el->collides(*crz)) {
+            if (el != currentRect) {
+                RectanglesInRenderZone.append(el);
+            }
         }
     }
-    return nullptr;
 }
 
 void MainGraphicsView::drawFigure(QGraphicsItem* item) {
